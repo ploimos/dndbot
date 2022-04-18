@@ -67,15 +67,15 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     let txtChannel = client.channels.cache.get(canale); //my own text channel, you may want to specify your own
     let oldRoleIDs = [];
     oldMember.roles.cache.each(role => {
-        console.log(role.name, role.id);
-        oldRoleIDs.push(role.id);
+        //console.log(role.name, role.id);
+        //oldRoleIDs.push(role.id);
     });
     let newRoleIDs = [];
     newMember.roles.cache.each(role => {
-        console.log(role.name, role.id);
-        newRoleIDs.push(role.id);
+        //console.log(role.name, role.id);
+        //newRoleIDs.push(role.id);
     });
-    console.log("---")
+    //console.log("---")
     //check if the newRoleIDs had one more role, which means it added a new role
     if (newRoleIDs.length > oldRoleIDs.length 
     && newMember.roles.cache.has(utente)) {
