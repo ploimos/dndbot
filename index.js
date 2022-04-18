@@ -16,21 +16,25 @@ client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
         if (message.content.split(" ")[0] == "!give"){
             if (message.member.roles.cache.has(ruolo)) {
-                //if (message.content.split(" ").slice(-1)[0] != undefined){
-                    if (message.content.split(" ")[1]>1){
+                if (message.content.split(" ")[1].length>1){
+                    if(message.content.split(" ").slice(-1)[0]>3 ||
+                    message.content.split(" ").slice(-1)[0]<=0 ||
+                    isNaN(message.content.split(" ").slice(-1)[0]) == true){
+                        message.reply("Hai sbagliato le milestones.");
+                    } else if (message.content.split(" ").slice(-1)[0]>1){
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
                         " milestones a " + message.content.split(" ")[1] + ".");
-                    } else if (message.content.split(" ")[1]>0){
+                    } else if (message.content.split(" ").slice(-1)[0]>0){
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
                         " milestone a " + message.content.split(" ")[1] + ".");
                     }
-                //}
-                //else {
-                //    message.reply("Attenzione!\nLa formula è '!give" + 
-                //    " [Nome_PG] [Milestones]'.");
-                //}
+                }
+                else {
+                    message.reply("Attenzione!\nLa formula è '!give" + 
+                    " [Nome_PG] [Milestones]'.");
+                }
             } else {
                 message.reply("Non sei admin.");
             }
