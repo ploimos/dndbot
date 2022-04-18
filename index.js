@@ -64,7 +64,7 @@ client.on("messageCreate", (message) => {
 
 client.on("guildMemberUpdate", member => {
 
-    const channel = member.guild.channels.cache.find(channel => channel.id === canale)
+    const channel = member.guild.channels.cache.find(channel => channel === "generale")
     if (!channel) return;
 
     const joinembed = new Discord.MessageEmbed()
