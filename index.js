@@ -4,6 +4,7 @@ const client = new Discord.Client(
 )
 
 var ruolo = "965547318009016330" //admin
+var canale = "965263672421277748" //canale dove scrive il bot
 
 //client.login(process.env.token)
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
@@ -12,7 +13,7 @@ client.on("ready", () => {
 })
 
 client.on("messageCreate", (message) => {
-    if(message.author.bot == false) {
+    if(message.author.bot == false && message.channel == canale) {
         if (message.member.roles.cache.has(ruolo)) {
             message.reply("Ciao amministratore!");
         } else {
@@ -34,6 +35,7 @@ client.on("messageCreate", (message) => {
         //console.log(fchar)
         //console.log(uchar)
         console.log(a)
+        console.log(message)
     }
 })
 
