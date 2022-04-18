@@ -72,5 +72,5 @@ client.on("guildMemberUpdate", member => {
     .setDescription(`Welcome ${member} we hope you enjoy your stay here!`)
     .setColor("#FF0000")
 
-    channel.send(joinembed)
+    console.log("AAAA")
 });
