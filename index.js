@@ -76,7 +76,8 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     });
     console.log("---")
     //check if the newRoleIDs had one more role, which means it added a new role
-    if (newRoleIDs.length > oldRoleIDs.length) {
+    if (newRoleIDs.length > oldRoleIDs.length 
+    && role.id == ruolo) {
         function filterOutOld(id) {
             for (var i = 0; i < oldRoleIDs.length; i++) {
                 if (id === oldRoleIDs[i]) {
@@ -85,6 +86,6 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
             }
             return true;
         }
-        txtChannel.send("Benvenuto tra i risvegliati!");
+        txtChannel.send("Benvenuto tra gli admin!");
     }
 })
