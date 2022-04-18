@@ -10,8 +10,12 @@ client.on("ready", () => {
 })
 
 client.on("messageCreate", (message) => {
-    if (message.content == "Ciao") {
-        message.channel.send("Salutamelo");
+    if(message.author.bot == false) {
+        if (message.member.roles.cache.has("965547318009016330")) {
+            message.reply("You are allowed to use this command.");
+        } else {
+            message.channel.send("You are not allowed to use this command.");
+        }
     }
 })
 
