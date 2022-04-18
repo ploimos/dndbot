@@ -61,9 +61,16 @@ client.on("messageCreate", (message) => {
     }
 })
 
-client.on("guildMemberUpdate", () => {
-    //if (member.roles == ruolo){
-        let a = client.guilds.get(server);
-        console.log(a.member)
-    //}
-})
+
+client.on("guildMemberUpdate", member => {
+
+    const channel = member.guild.channels.cache.find(channel => channel.id === canale)
+    if (!channel) return;
+
+    const joinembed = new Discord.MessageEmbed()
+    .setTitle(`Un membro ha cambiato ruolo!`)
+    .setDescription(`Welcome ${member} we hope you enjoy your stay here!`)
+    .setColor("#FF0000")
+
+    channel.send(joinembed)
+});
