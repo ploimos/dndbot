@@ -62,7 +62,7 @@ client.on("messageCreate", (message) => {
 })
 
 
-client.on('guildMemberUpdate', oldMember, newMember => {
+client.on('guildMemberUpdate', (oldMember, newMember) => {
     const oldRoles = oldMember.roles.cache;
     const newRoles = newMember.roles.cache;
     if (oldRoles.size < newRoles.size) {
