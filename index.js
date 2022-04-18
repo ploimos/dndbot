@@ -93,9 +93,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
         
         const newRoleAdded = new Discord.MessageEmbed()
             .setTitle('Role added')
-            .setAuthor(`${newMember.user.tag}`, `${icon}`)
             .setDescription(`<@&${IDNum}>`)
-            .setFooter(`ID: ${IDNum}`)
             .setTimestamp()
     
         txtChannel.send(newRoleAdded);
