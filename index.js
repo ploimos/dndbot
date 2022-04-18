@@ -32,8 +32,8 @@ client.on("messageCreate", (message) => {
                     }
                 }
                 else {
-                    message.reply("Attenzione!\nLa formula è '!give" + 
-                    " [Nome_PG] [Milestones]'.");
+                    message.reply("**Attenzione!**\nLa formula è *'!give" + 
+                    " [Nome_PG] [Milestones]'*.");
                 }
             } else {
                 message.reply("Non sei admin.");
