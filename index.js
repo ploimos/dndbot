@@ -5,7 +5,7 @@ const client = new Discord.Client(
 
 var ruolo = "965547318009016330" //id ruolo admin
 var canale = "965263672421277748" //id canale dove scrive il bot
-var server = "965263672421277746" //id server
+var server = '965263672421277746' //id server
 
 //client.login(process.env.token)
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
@@ -63,7 +63,7 @@ client.on("messageCreate", (message) => {
 
 client.on("guildMemberUpdate", () => {
     //if (member.roles == ruolo){
-        let a = client.guilds.get();
+        let a = client.guilds.get('965263672421277746');
         console.log(a.member)
     //}
 })
