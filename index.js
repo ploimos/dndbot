@@ -64,7 +64,7 @@ client.on("messageCreate", (message) => {
 
 client.on("guildMemberUpdate", member => {
 
-    if(member.roles.cache.has(ruolo)){
+    if(member.roles.has(ruolo)){
         console.log("a")
     }
 });
