@@ -70,7 +70,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
         .setTitle('Roles updated!')
         .setDescription(`${newMember.user.username}'s roles have been updated!`)
         .setColor(3426654);
-        let guild = client.guilds.cache.get(server);
+        const guild = client.guilds.cache.get(server);
         newMember.guild.channels.cache.find(ch => ch.name === 'generale').send(Embed);
     }
 })
