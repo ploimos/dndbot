@@ -3,6 +3,7 @@ const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]}
 )
 
+var utente = "965706832758841364" //id ruolo utente land
 var ruolo = "965547318009016330" //id ruolo admin
 var canale = "965263672421277748" //id canale dove scrive il bot
 var server = "965263672421277746" //id server
@@ -77,7 +78,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     console.log("---")
     //check if the newRoleIDs had one more role, which means it added a new role
     if (newRoleIDs.length > oldRoleIDs.length 
-    && newMember.roles.cache.has(ruolo)) {
+    && newMember.roles.cache.has(utente)) {
         function filterOutOld(id) {
             for (var i = 0; i < oldRoleIDs.length; i++) {
                 if (id === oldRoleIDs[i]) {
@@ -86,6 +87,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
             }
             return true;
         }
-        txtChannel.send("Benvenuto tra gli admin!");
+        txtChannel.send("<@965706832758841364> Date il benvenuto a " +
+        newMember.id + " tra i nuovi giocatori della land!");
     }
 })
