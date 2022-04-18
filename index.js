@@ -18,6 +18,14 @@ client.on("messageCreate", (message) => {
         } else {
             message.channel.send("Non puoi scrivere qui, non sei admin.");
         }
+
+        let myStr = message.content
+        let firstWord = myStr.split(" ")[0]
+        let secondWord = myStr.split(" ")[1]
+        let thirdWord = myStr.split(" ")[2]
+        console.log(firstWord)
+        console.log(secondWord)
+        console.log(thirdWord)
     }
 })
 
