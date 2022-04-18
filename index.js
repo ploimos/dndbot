@@ -10,8 +10,8 @@ client.on("ready", () => {
 })
 
 client.on("messageCreate", (message) => {
-    if (message.member.roles.cache.has("965547318009016330") && message.author.bot == false) {
-        message.channel.send("You are allowed to use this command.");
+    if (message="Ciao") {
+        message.channel.send("bello!");
     }
 })
 
