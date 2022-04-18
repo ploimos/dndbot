@@ -96,7 +96,6 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
             .setDescription(`<@&${IDNum}>`)
             .setTimestamp()
     
-        txtChannel.send("UEAHJ");
+        txtChannel.send("Ruolo cambiato");
     }
-    txtChannel.send("UEAHJ")
 })
