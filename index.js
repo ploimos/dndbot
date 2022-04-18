@@ -14,17 +14,22 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
-        if (message.member.roles.cache.has(ruolo)) {
-            message.reply("Ciao amministratore!");
-        } else {
-            message.channel.send("Non puoi scrivere qui, non sei admin.");
+        //if (message.member.roles.cache.has(ruolo)) {
+        //    message.reply("Ciao amministratore!");
+        //} else {
+        //    message.channel.send("Non puoi scrivere qui, non sei admin.");
+        //}
+        if (message.content.split(" ")[0] == "!give"){
+            message.reply("Ho aggiunto " + 
+            message.content.split(" ").slice(-1) +
+            " milestones a " + message.content.split(" ")[1] + ".");
         }
-
         let myStr = message.content
         let firstWord = myStr.split(" ")[0]
         let secondWord = myStr.split(" ")[1]
         let thirdWord = myStr.split(" ")[2]
         let lastword = myStr.split(" ").slice(-1)[0]
+        let fcharfword = myStr.split(" ")[0][0]
         let a = myStr.split(" ").slice(0)
         //let fchar = thirdWord.split("")[0] //first char
         //let uchar = thirdWord.slice(-1) //last char
@@ -32,10 +37,11 @@ client.on("messageCreate", (message) => {
         console.log(secondWord)
         console.log(thirdWord)
         console.log(lastword)
+        console.log(fcharfword)
+        console.log(a)
         //console.log(fchar)
         //console.log(uchar)
-        console.log(a)
-        console.log(message)
+        //console.log(message)
     }
 })
 
