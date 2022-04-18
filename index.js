@@ -87,7 +87,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
             }
             return true;
         }
-        txtChannel.send("<@965706832758841364> Date il benvenuto a <@" +
+        txtChannel.send("<@&${'965706832758841364'}> Date il benvenuto a <@" +
         newMember.id + "> tra i nuovi giocatori della land!");
     }
 })
