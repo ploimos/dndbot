@@ -14,15 +14,26 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
-        //if (message.member.roles.cache.has(ruolo)) {
-        //    message.reply("Ciao amministratore!");
-        //} else {
-        //    message.channel.send("Non puoi scrivere qui, non sei admin.");
-        //}
         if (message.content.split(" ")[0] == "!give"){
-            message.reply("Ho aggiunto " + 
-            message.content.split(" ").slice(-1) +
-            " milestones a " + message.content.split(" ")[1] + ".");
+            if (message.member.roles.cache.has(ruolo)) {
+                //if (message.content.split(" ").slice(-1)[0] != undefined){
+                    if (message.content.split(" ")[1]>1){
+                        message.reply("Ho aggiunto " + 
+                        message.content.split(" ").slice(-1) +
+                        " milestones a " + message.content.split(" ")[1] + ".");
+                    } else if (message.content.split(" ")[1]>0){
+                        message.reply("Ho aggiunto " + 
+                        message.content.split(" ").slice(-1) +
+                        " milestone a " + message.content.split(" ")[1] + ".");
+                    }
+                //}
+                //else {
+                //    message.reply("Attenzione!\nLa formula è '!give" + 
+                //    " [Nome_PG] [Milestones]'.");
+                //}
+            } else {
+                message.reply("Non sei admin.");
+            }
         }
         let myStr = message.content
         let firstWord = myStr.split(" ")[0]
