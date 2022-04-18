@@ -74,6 +74,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
         console.log(role.name, role.id);
         newRoleIDs.push(role.id);
     });
+    console.log("---")
     //check if the newRoleIDs had one more role, which means it added a new role
     if (newRoleIDs.length > oldRoleIDs.length) {
         function filterOutOld(id) {
@@ -84,18 +85,6 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
             }
             return true;
         }
-        let onlyRole = newRoleIDs.filter(filterOutOld);
-
-        let IDNum = onlyRole[0];
-        //fetch the link of the icon name
-        //NOTE: only works if the user has their own icon, else it'll return null if user has standard discord icon
-        let icon = newMember.user.avatarURL();
-        
-        const newRoleAdded = new Discord.MessageEmbed()
-            .setTitle('Role added')
-            .setDescription(`<@&${IDNum}>`)
-            .setTimestamp()
-    
-        txtChannel.send("Ruolo cambiato");
+        txtChannel.send("Benvenuto tra i risvegliati!");
     }
 })
