@@ -72,7 +72,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     let newRoleIDs = [];
     newMember.roles.cache.each(role => {
         console.log(role.name, role.id);
-        newRoleIDs.push(role.id);
+        //newRoleIDs.push(role.id);
     });
     console.log("---")
     //check if the newRoleIDs had one more role, which means it added a new role
