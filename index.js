@@ -77,7 +77,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     console.log("---")
     //check if the newRoleIDs had one more role, which means it added a new role
     if (newRoleIDs.length > oldRoleIDs.length 
-    && role.id == ruolo) {
+    && newMember.roles.cache.has(ruolo)) {
         function filterOutOld(id) {
             for (var i = 0; i < oldRoleIDs.length; i++) {
                 if (id === oldRoleIDs[i]) {
