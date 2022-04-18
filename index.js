@@ -96,6 +96,6 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
             .setDescription(`<@&${IDNum}>`)
             .setTimestamp()
     
-        txtChannel.send(newRoleAdded);
+        txtChannel.send("UEAHJ");
     }
 })
