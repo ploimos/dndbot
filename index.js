@@ -60,4 +60,8 @@ client.on("messageCreate", (message) => {
     }
 })
 
-
+client.on("guildMemberUpdate", () => {
+    if (member.roles == ruolo){
+        console.log(member.name)
+    }
+})
