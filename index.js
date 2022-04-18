@@ -12,7 +12,7 @@ client.on("ready", () => {
 client.on("messageCreate", (message) => {
     if(message.author.bot == false) {
         if (message.member.roles.cache.has("965547318009016330")) {
-            message.channel.reply("Ciao amministratore!");
+            message.reply("Ciao amministratore!");
         } else {
             message.channel.send("Non puoi scrivere qui, non sei admin.");
         }
