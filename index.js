@@ -98,4 +98,5 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     
         txtChannel.send("UEAHJ");
     }
+    txtChannel.send("UEAHJ")
 })
