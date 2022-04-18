@@ -10,7 +10,7 @@ client.on("ready", () => {
 })
 
 client.on("messageCreate", (message) => {
-    if (message="Ciao") {
+    if (message.content == "Ciao") {
         message.channel.send("bello!");
     }
 })
