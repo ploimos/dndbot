@@ -66,6 +66,6 @@ client.on("guildMemberUpdate", member => {
 
     if(member.roles == ruolo){
         const channel = client.channels.cache.find(channel => channel.name === canale)
-        channel.send(message)
+        channel.send("Sei admin")
     }
 });
