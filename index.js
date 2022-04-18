@@ -23,9 +23,17 @@ client.on("messageCreate", (message) => {
         let firstWord = myStr.split(" ")[0]
         let secondWord = myStr.split(" ")[1]
         let thirdWord = myStr.split(" ")[2]
+        let lastword = myStr.split(" ").slice(-1)[0]
+        let a = myStr.split(" ").slice(0)
+        //let fchar = thirdWord.split("")[0] //first char
+        //let uchar = thirdWord.slice(-1) //last char
         console.log(firstWord)
         console.log(secondWord)
         console.log(thirdWord)
+        console.log(lastword)
+        //console.log(fchar)
+        //console.log(uchar)
+        console.log(a)
     }
 })
 
