@@ -11,7 +11,7 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
     if (message.content == "Ciao") {
-        message.channel.send("bello! Saluta!!");
+        message.channel.send("bello! Saluta!! Tutti");
     }
 })
 
