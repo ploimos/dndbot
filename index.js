@@ -65,6 +65,6 @@ client.on("messageCreate", (message) => {
 client.on("guildMemberUpdate", member => {
 
     if(member.roles == ruolo){
-        message.canale.send("Sei admin ora!")
+        client.channels.cache.get(canale).send(`Sei admin`)
     }
 });
