@@ -48,7 +48,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db("DbDnD");
-                            const res = database.collection("Land").find({id:name});
+                            const res = database.collection("Land").findOne({id:name});
                             if (!res){
                                 database.collection("Land").insertOne({id: name,
                                 ms: num})
