@@ -56,7 +56,7 @@ client.on("messageCreate", (message) => {
                                 database.collection("Land").updateOne({id: name}, {$inc: {ms: num}})
                                 console.log("c'era")
                             }*/
-                            console.log(res)
+                            console.log("Il res è"+res)
                         })
                     }
                 }
