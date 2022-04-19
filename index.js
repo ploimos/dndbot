@@ -23,14 +23,15 @@ client.on("messageCreate", (message) => {
                     message.content.split(" ").slice(-1)[0]<=0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato le milestones.");
-                    } else if (message.content.split(" ").slice(-1)[0]>1){
+                    } else {
+                        if (message.content.split(" ").slice(-1)[0]>1){
+                            var s = "s"
+                        } else if (message.content.split(" ").slice(-1)[0]>0){
+                            var s = ""
+                        }
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
-                        " milestones a " + message.content.split(" ")[1] + ".");
-                    } else if (message.content.split(" ").slice(-1)[0]>0){
-                        message.reply("Ho aggiunto " + 
-                        message.content.split(" ").slice(-1) +
-                        " milestone a " + message.content.split(" ")[1] + ".");
+                        " milestone"+s+" a " + message.content.split(" ")[1] + ".");
                     }
                 }
                 else {
