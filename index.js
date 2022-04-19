@@ -12,19 +12,20 @@ var server = "965263672421277746" //id server
 //client.login(process.env.token)
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 
+var database;
+
 client.on("ready", () => {
     console.log("ONLINE");
 
-    var db = MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-    database = db.db("DbDnD");
+    var db = MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+    var database = db.db("DbDnD");
 })
 
 var MongoClient = require("mongodb").MongoClient;
 
 var url = "mongodb+srv://botperdnd:cCgYya6YDwnGDH9h@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
-var db = MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
-var database = db.db("DbDnD");
+
 
     database.collection("Land").insertOne({id: 2332, nome: "Finnan", 
     ms: 22, level: 8, money: 400})
