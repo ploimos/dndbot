@@ -16,15 +16,15 @@ client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 //var MongoClient = require("mongodb").MongoClient;
 var database;
 var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-/*{
-    var 
-    database.collection("Land").deleteOne({id: 2332, nome: "Finnan", ms: 22, level: 8, money: 400});
-})*/
+var db = MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
+    var database = db.db("DbDnD");
+    database.collection("Land").insertOne({id: 2332, nome: "Finnan", ms: 22, level: 8, money: 400});
+
 
 client.on("ready", () => {
     console.log("ONLINE");
-    var db = MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
-    database = db.db("DbDnD");
+
+    
     
 })
 
