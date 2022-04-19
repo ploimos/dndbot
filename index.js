@@ -55,7 +55,7 @@ client.on("messageCreate", (message) => {
                                 console.log("non c'era")
                             /*} else {*/
                                 database.collection("Land").updateOne({id: name},
-                                {$inc: {ms: 1}})
+                                {ms: 1})
                                 console.log("c'era")
                             /*}*/
                             
