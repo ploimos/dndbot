@@ -36,7 +36,7 @@ client.on("messageCreate", (message) => {
                 }
                 else {
                     message.reply("**Attenzione!**\nLa formula è *'!give" + 
-                    " [Nome_PG] [Milestones]'*.");
+                    " [Tag_Player] [Milestones]'*.");
                 }
             } else {
                 message.reply("Non sei admin.");
