@@ -17,7 +17,7 @@ var database;
 var url = "mongodb+srv://botperdnd:cCgYya6YDwnGDH9h@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 var db = MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
     var database = db.db("DbDnD");
-    database.collection("Land").insertOne({id: 2333, nome: "Finnan", ms: 22, level: 8, money: 400});
+    database.collection("Land").deleteOne({id: 2333, nome: "Finnan", ms: 22, level: 8, money: 400});
 })
 
 client.on("ready", () => {
