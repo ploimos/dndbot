@@ -16,12 +16,7 @@ client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 //var MongoClient = require("mongodb").MongoClient;
 var database;
 var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-function dbconnect (database, url){
-    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
-        var database = db.db("DbDnD");
-        database.collection("Land").insertOne({id: 2334, nome: "Finnan", ms: 22, level: 8, money: 400});
-    })
-}
+
 
 client.on("ready", () => {
     console.log("ONLINE");
@@ -47,7 +42,10 @@ client.on("messageCreate", (message) => {
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + ".");
-                        dbconnect();
+                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
+                            var database = db.db("DbDnD");
+                            database.collection("Land").insertOne({id: 2334, nome: "Finnan", ms: 22, level: 8, money: 400});
+                        })
                     }
                 }
                 else {
