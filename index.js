@@ -48,7 +48,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db("DbDnD");
-                            if (database.collection("Land").find({id:name}) != null){
+                            if (database.collection("Land").find({id:name}) !== null){
                                 database.collection("Land").updateOne({id: name},
                                 {$set:{ms: num++}})
                             } else {
