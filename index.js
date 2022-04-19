@@ -44,7 +44,8 @@ client.on("messageCreate", (message) => {
                         " milestone"+s+" a " + message.content.split(" ")[1] + ".");
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db("DbDnD");
-                            var num = message.content.split(" ").slice(-1).replace(/\D/g, "");
+                            var numm = message.content.split(" ").slice(-1);
+                            var num = numm.replace(/\D/g, "");
                             var name = message.content.split(" ")[1];
                             database.collection("Land").insertOne({id: name,
                             ms: num});
