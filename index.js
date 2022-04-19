@@ -42,12 +42,20 @@ client.on("messageCreate", (message) => {
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + ".");
+
+                        var num = parseInt(message.content.split(" ").slice(-1));
+                        var name = message.content.split(" ")[1];
+
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db("DbDnD");
-                            var num = parseInt(message.content.split(" ").slice(-1));
-                            var name = message.content.split(" ")[1];
-                            database.collection("Land").insertOne({id: name,
-                            ms: num});
+                            if (database.collection("Land").find({id:name}) == true){
+                                database.collection("Land").updateOne({id: name},
+                                {$set:{ms: num++}})
+                            } else {
+                                database.collection("Land").insertOne({id: name,
+                                ms: num});
+                            }
+                            
                         })
                     }
                 }
