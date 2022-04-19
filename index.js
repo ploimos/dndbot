@@ -51,10 +51,12 @@ client.on("messageCreate", (message) => {
                             const res = database.collection("Land").find({id:name});
                             if (!res){
                                 database.collection("Land").insertOne({id: name,
-                                ms: num});
+                                ms: num})
+                                console.log("non c'era")
                             } else {
                                 database.collection("Land").updateOne({id: name},
-                                {$set:{ms: num++}});
+                                {$set:{ms: num++}})
+                                console.log("c'era")
                             }
                             
                         })
