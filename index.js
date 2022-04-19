@@ -13,6 +13,7 @@ var server = "965263672421277746" //id server
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 
 var database;
+const MongoClient = require("mongodb").MongoClient;
 
 client.on("ready", () => {
     console.log("ONLINE");
@@ -20,8 +21,6 @@ client.on("ready", () => {
     var db = MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
     database = db.db("DbDnD");
 })
-
-const MongoClient = require("mongodb").MongoClient;
 
 var url = "mongodb+srv://botperdnd:cCgYya6YDwnGDH9h@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db){
