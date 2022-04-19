@@ -26,7 +26,7 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
-        if (message.content.split(" ")[0] == "!give"){
+        if (message.content.split(" ")[0] == "!givems"){
             if (message.member.roles.cache.has(ruolo)) {
                 if (message.content.split(" ")[1].length>1){
                     if(message.content.split(" ").slice(-1)[0]>3 ||
