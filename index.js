@@ -25,9 +25,7 @@ client.on("ready", () => {
 
 var url = "mongodb+srv://botperdnd:cCgYya6YDwnGDH9h@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
-
-
-    database.collection("Land").insertOne({id: 2332, nome: "Finnan", ms: 22, level: 8, money: 400})
+database.collection("Land").insertOne({id: 2332, nome: "Finnan", ms: 22, level: 8, money: 400})
 
 
 client.on("messageCreate", (message) => {
