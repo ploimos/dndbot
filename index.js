@@ -9,6 +9,8 @@ var ruolo = "965547318009016330" //id ruolo admin
 var canale = "965263672421277748" //id canale dove scrive il bot
 var server = "965263672421277746" //id server
 var pass = "cCgYya6YDwnGDH9h" //pass database
+var ndb = "DbDnD" //nome database
+var col1 = "tab1" //nome collection 1
 
 //client.login(process.env.token)
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
@@ -49,8 +51,8 @@ client.on("messageCreate", (message) => {
                         var name = message.content.split(" ")[1];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
-                            var database = db.db("DbDnD");
-                            database.collection("Land").updateOne({id: name},{$inc: {ms: num, money: 0}}, {upsert: true})
+                            var database = db.db(ndb);
+                            database.collection(col1).updateOne({id: name},{$inc: {ms: num, money: 0}}, {upsert: true})
                         })
                     }
                 }
