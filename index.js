@@ -19,7 +19,7 @@ client.on("ready", () => {
     database = db.db("DbDnD");
 })
 
-const MongoClient = require("mongodb").MongoClient;
+var MongoClient = require("mongodb").MongoClient;
 
 var url = "mongodb+srv://botperdnd:cCgYya6YDwnGDH9h@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
