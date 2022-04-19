@@ -54,7 +54,7 @@ client.on("messageCreate", (message) => {
                                 ms: num})
                                 console.log("non c'era")
                             /*} else {*/
-                                console.log(name)
+                                console.log("Il tag è"+name)
                                 database.collection("Land").updateOne({id: name}, {$set: {ms: 1}})
                                 console.log("c'era")
                             /*}*/
