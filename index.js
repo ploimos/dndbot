@@ -24,7 +24,7 @@ client.on("ready", () => {
 
 //var MongoClient = require("mongodb").MongoClient;
 
-database.collection("Land").insertOne({id: 2332, nome: "Finnan", ms: 22, level: 8, money: 400})
+//database.collection("Land").insertOne({id: 2332, nome: "Finnan", ms: 22, level: 8, money: 400})
 
 
 client.on("messageCreate", (message) => {
