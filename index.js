@@ -53,7 +53,7 @@ client.on("messageCreate", (message) => {
                     }
                 }
                 else {
-                    message.reply("**Attenzione!**\nLa formula è *'!give" + 
+                    message.reply("**Attenzione!**\nLa formula è *'!givems" + 
                     " [Tag_Player] [Milestones]'*.");
                 }
             } else {
