@@ -14,10 +14,9 @@ var pass = "cCgYya6YDwnGDH9h" //pass database
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 
 //var MongoClient = require("mongodb").MongoClient;
-var database;
+var database = db.db("DbDnD");
 var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
-    var database = db.db("DbDnD");
     database.collection("Land").insertOne({id: 2334, nome: "Finnan", ms: 22, level: 8, money: 400});
 })
 
