@@ -8,13 +8,14 @@ var utente = "965706832758841364" //id ruolo utente land
 var ruolo = "965547318009016330" //id ruolo admin
 var canale = "965263672421277748" //id canale dove scrive il bot
 var server = "965263672421277746" //id server
+var pass = "cCgYya6YDwnGDH9h" //pass database
 
 //client.login(process.env.token)
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 
 //var MongoClient = require("mongodb").MongoClient;
 var database;
-var url = "mongodb+srv://botperdnd:cCgYya6YDwnGDH9h@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 var db = MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
     var database = db.db("DbDnD");
     database.collection("Land").deleteOne({id: 2333, nome: "Finnan", ms: 22, level: 8, money: 400});
