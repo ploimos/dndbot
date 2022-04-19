@@ -50,7 +50,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db("DbDnD");
-                            database.collection("Land").updateOne({id: name},{$inc: {ms: num}, money}, {upsert: true})
+                            database.collection("Land").updateOne({id: name},{$inc: {ms: num}, money: 0}, {upsert: true})
                         })
                     }
                 }
