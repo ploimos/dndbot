@@ -26,6 +26,8 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
+        
+        //Dare MS ai giocatori        
         if (message.content.split(" ")[0] == "!givems"){
             if (message.member.roles.cache.has(ruolo)){
                 if (message.content.split(" ")[1].length>1){
@@ -48,7 +50,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db("DbDnD");
-                            database.collection("Land").updateOne({id: name},{$inc: {ms: num}}, {upsert: true})
+                            database.collection("Land").updateOne({id: name},{$inc: {ms: num}, money}, {upsert: true})
                         })
                     }
                 }
@@ -60,6 +62,10 @@ client.on("messageCreate", (message) => {
                 message.reply("Non sei admin.");
             }
         }
+
+        //Dare money ai giocatori
+
+
         /*let myStr = message.content
         let firstWord = myStr.split(" ")[0]
         let secondWord = myStr.split(" ")[1]
