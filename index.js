@@ -48,7 +48,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db("DbDnD");
-                            const res = database.collection("Land").findOne({id:name});
+                            /*const res = database.collection("Land").findOne({id:name});
                             console.log("nome è"+name)
                             if (!res){
                                 database.collection("Land").insertOne({id: name, ms: num})
@@ -56,7 +56,8 @@ client.on("messageCreate", (message) => {
                             } else {
                                 database.collection("Land").updateOne({id: name}, {$inc: {ms: num}})
                                 console.log("c'era")
-                            }
+                            }*/
+                            database.collection("Land").updateOne({id: name},{$inc: {ms: num}}, {upsert: true})
                         })
                     }
                 }
