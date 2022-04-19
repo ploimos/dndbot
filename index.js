@@ -60,7 +60,7 @@ client.on("messageCreate", (message) => {
                 message.reply("Non sei admin.");
             }
         }
-        let myStr = message.content
+        /*let myStr = message.content
         let firstWord = myStr.split(" ")[0]
         let secondWord = myStr.split(" ")[1]
         let thirdWord = myStr.split(" ")[2]
@@ -77,7 +77,7 @@ client.on("messageCreate", (message) => {
         console.log(a)
         //console.log(fchar)
         //console.log(uchar)
-        //console.log(message)
+        //console.log(message)*/
     }
 })
 
