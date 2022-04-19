@@ -47,7 +47,7 @@ client.on("messageCreate", (message) => {
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + ".");
-                        function dbconnect()
+                        dbconnect();
                     }
                 }
                 else {
