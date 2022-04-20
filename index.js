@@ -34,7 +34,7 @@ client.on("messageCreate", (message) => {
         //Dare MS ai giocatori        
         if (message.content.split(" ")[0] == "!givems"){
             if (message.member.roles.cache.has(ruolo)){
-                var frase = "!givems [Tag_Player] [Milestones]"; // comando scritto
+                var frase = " *'!givems [Tag_Player] [Milestones]'*."; // comando scritto
                 if (message.content.split(" ")[1].length>1){
                     if(message.content.split(" ").slice(-1)[0]>3 ||
                     message.content.split(" ").slice(-1)[0]<=0 ||
@@ -60,7 +60,7 @@ client.on("messageCreate", (message) => {
                     }
                 }
                 else {
-                    message.reply(att+" *'"+frase+"'*."); // formula errata
+                    message.reply(att+frase); // formula errata
                 }
             } else {
                 message.reply(amm); // messaggio non sei admin
@@ -70,7 +70,7 @@ client.on("messageCreate", (message) => {
         //Dare money ai giocatori
         if (message.content.split(" ")[0] == "!givemo"){
             if (message.member.roles.cache.has(ruolo)){
-                var frase = "!givemo [Tag_Player] [Denaro]"; // comando scritto
+                var frase = " *'!givemo [Tag_Player] [Denaro]'*."; // comando scritto
                 if (message.content.split(" ")[1].length>1){
                     if(message.content.split(" ").slice(-1)[0]>3 ||
                     message.content.split(" ").slice(-1)[0]<=0 ||
@@ -92,7 +92,7 @@ client.on("messageCreate", (message) => {
                     }
                 }
                 else {
-                    message.reply(att+" *'"+frase+"'*."); // formula errata
+                    message.reply(att+frase); // formula errata
                 }
             } else {
                 message.reply(amm); // messaggio non sei admin
