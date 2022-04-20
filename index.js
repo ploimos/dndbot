@@ -80,10 +80,14 @@ client.on("messageCreate", (message) => {
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
-
+                        if (message.content.split(" ").slice(-1)[0]>1){
+                            var s = "e"
+                        } else if (message.content.split(" ").slice(-1)[0]>0){
+                            var s = "a"
+                        }
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
-                        " monete d'oro a " + message.content.split(" ")[1] + "."); // risposta
+                        " monet"+s+" d'oro a " + message.content.split(" ")[1] + "."); // risposta
 
                         var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
                         var name = message.content.split(" ")[1];
