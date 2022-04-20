@@ -31,7 +31,9 @@ client.on("ready", () => {
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
         
-        //Dare MS ai giocatori        
+
+        //Dare MS ai giocatori  
+
         if (message.content.split(" ")[0] == "!givems"){
             if (message.member.roles.cache.has(ruolo)){
                 var frase = " *'!givems [Tag_Player] [Milestones]'*."; // comando scritto
@@ -50,7 +52,7 @@ client.on("messageCreate", (message) => {
                         message.content.split(" ").slice(-1) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + "."); // messaggio risposta
 
-                        var num = parseFloat(message.content.split(" ").slice(-1)); // dichiarazione valori
+                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazione valori
                         var name = message.content.split(" ")[1];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
@@ -67,10 +69,46 @@ client.on("messageCreate", (message) => {
             }
         }
 
-        //Dare money ai giocatori
+
+        // Dare money ai giocatori
+
         if (message.content.split(" ")[0] == "!givemo"){
             if (message.member.roles.cache.has(ruolo)){
                 var frase = " *'!givemo [Tag_Player] [Denaro]'*."; // comando scritto
+                if (message.content.split(" ")[1].length>1){
+                    if(message.content.split(" ").slice(-1)[0]>3 ||
+                    message.content.split(" ").slice(-1)[0]<=0 ||
+                    isNaN(message.content.split(" ").slice(-1)[0]) == true){
+                        message.reply("Hai sbagliato il denaro."); // errore valore
+                    } else {
+
+                        message.reply("Ho aggiunto " + 
+                        message.content.split(" ").slice(-1) +
+                        " monete d'oro a " + message.content.split(" ")[1] + "."); // risposta
+
+                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazioni valori
+                        var name = message.content.split(" ")[1];
+
+                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
+                            var database = db.db(ndb);
+                            database.collection(col1).updateOne({id: name},{$inc: {money: num}}, {upsert: true})
+                        })
+                    }
+                }
+                else {
+                    message.reply(att+frase); // formula errata
+                }
+            } else {
+                message.reply(amm); // messaggio non sei admin
+            }
+        }
+
+
+        // creare PG
+
+        if (message.content.split(" ")[0] == "!creapg"){
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
+                var frase = " *'!creapg [Tag_Player] [Nome_PG] [Denaro] [For] [Des] [Cos] [Int] [Car] [Sag]'*."; // comando scritto
                 if (message.content.split(" ")[1].length>1){
                     if(message.content.split(" ").slice(-1)[0]>3 ||
                     message.content.split(" ").slice(-1)[0]<=0 ||
@@ -87,7 +125,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            database.collection(col1).updateOne({id: name},{$inc: {money: num}}, {upsert: true})
+                            database.collection(col1).inserteOne({id: name})
                         })
                     }
                 }
@@ -98,8 +136,9 @@ client.on("messageCreate", (message) => {
                 message.reply(amm); // messaggio non sei admin
             }
         }
+
         
-        //help differenziato per ruolo admin e utente
+        // help differenziato per ruolo admin e utente
         
         if (message.content.split(" ")[0] == "!help"){
             if (message.member.roles.cache.has(ruolo)){                     // help admin
