@@ -67,7 +67,7 @@ client.on("messageCreate", (message) => {
 
         //Dare money ai giocatori
         
-
+        //help differenziato per ruolo admin e utente
 
         /*let myStr = message.content
         let firstWord = myStr.split(" ")[0]
