@@ -147,7 +147,7 @@ client.on("messageCreate", (message) => {
                 "*Il comando è '!givemo [Tag_Player] [Denaro]'*.\n\n");
             } else if (message.member.roles.cache.has(utente)){              // help giocatori
                 message.reply("!creapg\n"+
-                "*Il comando è '!givepg ...'*.");
+                "*Il comando è '!creapg ...'*.");
             }
         }
 
