@@ -66,6 +66,7 @@ client.on("messageCreate", (message) => {
         }
 
         //Dare money ai giocatori
+        
 
 
         /*let myStr = message.content
