@@ -39,7 +39,7 @@ client.on("messageCreate", (message) => {
                 var frase = " *'!givems [Tag_Player] [Milestones]'*."; // comando scritto
                 if (message.content.split(" ")[1].length>1){
                     if(message.content.split(" ").slice(-1)[0]>3 ||
-                    message.content.split(" ").slice(-1)[0]<=0 ||
+                    message.content.split(" ").slice(-1)[0]==0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato le milestones."); // errore valore
                     } else {
@@ -76,7 +76,7 @@ client.on("messageCreate", (message) => {
             if (message.member.roles.cache.has(ruolo)){
                 var frase = " *'!givemo [Tag_Player] [Denaro]'*."; // comando scritto
                 if (message.content.split(" ")[1].length>1){
-                    if(message.content.split(" ").slice(-1)[0]<=0 ||
+                    if(message.content.split(" ").slice(-1)[0]==0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
