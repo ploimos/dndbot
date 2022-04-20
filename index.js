@@ -4,6 +4,8 @@ const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]}
 )
 
+var amm = "Non sei admin."
+var att = "**Attenzione!**\nLa formula è"
 var utente = "965706832758841364" //id ruolo utente land
 var ruolo = "965547318009016330" //id ruolo admin
 var canale = "965263672421277748" //id canale dove scrive il bot
@@ -32,11 +34,12 @@ client.on("messageCreate", (message) => {
         //Dare MS ai giocatori        
         if (message.content.split(" ")[0] == "!givems"){
             if (message.member.roles.cache.has(ruolo)){
+                var frase = "!givems [Tag_Player] [Milestones]"; // comando scritto
                 if (message.content.split(" ")[1].length>1){
                     if(message.content.split(" ").slice(-1)[0]>3 ||
                     message.content.split(" ").slice(-1)[0]<=0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
-                        message.reply("Hai sbagliato le milestones.");
+                        message.reply("Hai sbagliato le milestones."); // errore valore
                     } else {
                         if (message.content.split(" ").slice(-1)[0]>1){
                             var s = "s"
@@ -45,67 +48,66 @@ client.on("messageCreate", (message) => {
                         }
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
-                        " milestone"+s+" a " + message.content.split(" ")[1] + ".");
+                        " milestone"+s+" a " + message.content.split(" ")[1] + "."); // messaggio risposta
 
-                        var num = parseInt(message.content.split(" ").slice(-1));
+                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazione valori
                         var name = message.content.split(" ")[1];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            database.collection(col1).updateOne({id: name},{$inc: {ms: num, money: 0}}, {upsert: true})
+                            database.collection(col1).updateOne({id: name},{$inc: {ms: num}}, {upsert: true})
                         })
                     }
                 }
                 else {
-                    message.reply("**Attenzione!**\nLa formula è *'!givems" + 
-                    " [Tag_Player] [Milestones]'*.");
+                    message.reply(att+" *'"+frase+"'*."); // formula errata
                 }
             } else {
-                message.reply("Non sei admin.");
+                message.reply(amm); // messaggio non sei admin
             }
         }
 
         //Dare money ai giocatori
         if (message.content.split(" ")[0] == "!givemo"){
             if (message.member.roles.cache.has(ruolo)){
+                var frase = "!givemo [Tag_Player] [Denaro]"; // comando scritto
                 if (message.content.split(" ")[1].length>1){
                     if(message.content.split(" ").slice(-1)[0]>3 ||
                     message.content.split(" ").slice(-1)[0]<=0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
-                        message.reply("Hai sbagliato il denaro.");
+                        message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
 
                         message.reply("Ho aggiunto " + 
                         message.content.split(" ").slice(-1) +
-                        " monete d'oro a " + message.content.split(" ")[1] + ".");
+                        " monete d'oro a " + message.content.split(" ")[1] + "."); // risposta
 
-                        var num = parseInt(message.content.split(" ").slice(-1));
+                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazioni valori
                         var name = message.content.split(" ")[1];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            database.collection(col1).updateOne({id: name},{$inc: {ms: num, money: 0}}, {upsert: true})
+                            database.collection(col1).updateOne({id: name},{$inc: {money: num}}, {upsert: true})
                         })
                     }
                 }
                 else {
-                    message.reply("**Attenzione!**\nLa formula è *'!givems" + 
-                    " [Tag_Player] [Milestones]'*.");
+                    message.reply(att+" *'"+frase+"'*."); // formula errata
                 }
             } else {
-                message.reply("Non sei admin.");
+                message.reply(amm); // messaggio non sei admin
             }
         }
         
         //help differenziato per ruolo admin e utente
         
         if (message.content.split(" ")[0] == "!help"){
-            if (message.member.roles.cache.has(ruolo)){
+            if (message.member.roles.cache.has(ruolo)){                     // help admin
                 message.reply("!givems\n"+
                 "*Il comando è '!givems [Tag_Player] [Milestones]'*.\n\n"+
                 "!givemo\n"+
                 "*Il comando è '!givemo [Tag_Player] [Denaro]'*.\n\n");
-            } else {
+            } else if (message.member.roles.cache.has(ruolo)){              // help giocatori
                 message.reply("!creapg\n"+
                 "*Il comando è '!givepg ...'*.");
             }
@@ -157,6 +159,9 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
             }
             return true;
         }
+        // decidere se inserire un messaggio variabile per dare il benvenuto ai giocatori
+        // e se fare in modo che il messaggio sia più caloroso o comunque piacevole
+        // chiedere agli altri master!!!
         txtChannel.send("<@&"+utente+">\nDate il benvenuto a <@" +
         newMember.id + "> tra i nuovi giocatori della land!");
     }
