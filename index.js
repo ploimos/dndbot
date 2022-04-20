@@ -70,14 +70,13 @@ client.on("messageCreate", (message) => {
         }
 
 
-        // Dare money ai giocatori
+        // Dare denaro ai giocatori
 
         if (message.content.split(" ")[0] == "!givemo"){
             if (message.member.roles.cache.has(ruolo)){
                 var frase = " *'!givemo [Tag_Player] [Denaro]'*."; // comando scritto
                 if (message.content.split(" ")[1].length>1){
-                    if(message.content.split(" ").slice(-1)[0]>3 ||
-                    message.content.split(" ").slice(-1)[0]<=0 ||
+                    if(message.content.split(" ").slice(-1)[0]<=0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
