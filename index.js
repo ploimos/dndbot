@@ -66,8 +66,50 @@ client.on("messageCreate", (message) => {
         }
 
         //Dare money ai giocatori
+        if (message.content.split(" ")[0] == "!givemo"){
+            if (message.member.roles.cache.has(ruolo)){
+                if (message.content.split(" ")[1].length>1){
+                    if(message.content.split(" ").slice(-1)[0]>3 ||
+                    message.content.split(" ").slice(-1)[0]<=0 ||
+                    isNaN(message.content.split(" ").slice(-1)[0]) == true){
+                        message.reply("Hai sbagliato il denaro.");
+                    } else {
+
+                        message.reply("Ho aggiunto " + 
+                        message.content.split(" ").slice(-1) +
+                        " monete d'oro a " + message.content.split(" ")[1] + ".");
+
+                        var num = parseInt(message.content.split(" ").slice(-1));
+                        var name = message.content.split(" ")[1];
+
+                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
+                            var database = db.db(ndb);
+                            database.collection(col1).updateOne({id: name},{$inc: {ms: num, money: 0}}, {upsert: true})
+                        })
+                    }
+                }
+                else {
+                    message.reply("**Attenzione!**\nLa formula è *'!givems" + 
+                    " [Tag_Player] [Milestones]'*.");
+                }
+            } else {
+                message.reply("Non sei admin.");
+            }
+        }
         
         //help differenziato per ruolo admin e utente
+        
+        if (message.content.split(" ")[0] == "!help"){
+            if (message.member.roles.cache.has(ruolo)){
+                message.reply("!givems\n"+
+                "*Il comando è '!givems [Tag_Player] [Milestones]'*.\n\n"+
+                "!givemo\n"+
+                "*Il comando è '!givemo [Tag_Player] [Denaro]'*.\n\n");
+            } else {
+                message.reply("!creapg\n"+
+                "*Il comando è '!givepg ...'*.");
+            }
+        }
 
         /*let myStr = message.content
         let firstWord = myStr.split(" ")[0]
