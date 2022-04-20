@@ -52,7 +52,7 @@ client.on("messageCreate", (message) => {
                         message.content.split(" ").slice(-1) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + "."); // messaggio risposta
 
-                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazione valori
+                        var num = parseFloat(message.content.split(" ").slice(-1)); // dichiarazione valori
                         var name = message.content.split(" ")[1];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
@@ -85,7 +85,7 @@ client.on("messageCreate", (message) => {
                         message.content.split(" ").slice(-1) +
                         " monete d'oro a " + message.content.split(" ")[1] + "."); // risposta
 
-                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazioni valori
+                        var num = parseFloat(message.content.split(" ").slice(-1)); // dichiarazioni valori
                         var name = message.content.split(" ")[1];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
