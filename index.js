@@ -119,9 +119,10 @@ client.on("messageCreate", (message) => {
                         message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
 
-                        message.reply("Ho aggiunto " + 
-                        message.content.split(" ").slice(-1) +
-                        " monete d'oro a " + message.content.split(" ")[1] + "."); // risposta
+                        message.reply("Ho creato un personaggio di nome " + 
+                        message.content.split(" ")[2] +
+                        " con "+ message.content.split(" ").slice(-1)[0] + 
+                        " monete d'oro iniziali."); // risposta
 
                         var num = parseFloat(message.content.split(" ").slice(-1)); // dichiarazioni valori
                         var tag = message.content.split(" ")[1];
