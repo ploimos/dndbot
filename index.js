@@ -48,7 +48,14 @@ client.on("messageCreate", (message) => {
                         } else if (message.content.split(" ").slice(-1)[0]>0 || message.content.split(" ").slice(-1)[0]<0){
                             var s = ""
                         }
-                        message.reply("Ho aggiunto " + 
+
+                        if (message.content.split(" ").slice(-1)[0]>0){
+                            var a = "aggiunto"
+                        } else if (message.content.split(" ").slice(-1)[0]<0){
+                            var a = "tolto"
+                        }
+
+                        message.reply("Ho "+a+" " + 
                         message.content.split(" ").slice(-1) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + "."); // messaggio risposta
 
@@ -85,7 +92,13 @@ client.on("messageCreate", (message) => {
                         } else if (message.content.split(" ").slice(-1)[0]>0 || message.content.split(" ").slice(-1)[0]<0){
                             var s = "a"
                         }
-                        message.reply("Ho aggiunto " + 
+                        if (message.content.split(" ").slice(-1)[0]>0){
+                            var a = "aggiunto"
+                        } else if (message.content.split(" ").slice(-1)[0]<0){
+                            var a = "tolto"
+                        }
+
+                        message.reply("Ho "+a+" " + 
                         message.content.split(" ").slice(-1) +
                         " monet"+s+" d'oro a " + message.content.split(" ")[1] + "."); // risposta
 
@@ -187,6 +200,8 @@ client.on("messageCreate", (message) => {
 })
 
 
+// Nuovo utente land
+
 client.on('guildMemberUpdate', (oldMember, newMember) => {
     let txtChannel = client.channels.cache.get(canale); //my own text channel, you may want to specify your own
     let oldRoleIDs = [];
@@ -202,7 +217,8 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     //console.log("---")
     //check if the newRoleIDs had one more role, which means it added a new role
     if (newRoleIDs.length > oldRoleIDs.length 
-    && newMember.roles.cache.has(utente)) {
+    && newMember.roles.cache.has(utente) 
+    && !oldMember.roles.cache.has(utente)) {
         function filterOutOld(id) {
             for (var i = 0; i < oldRoleIDs.length; i++) {
                 if (id === oldRoleIDs[i]) {
