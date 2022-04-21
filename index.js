@@ -128,18 +128,19 @@ client.on("messageCreate", (message) => {
 
                         if (!database.collection(col1).find({id: tag})) {
                             database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
-                            
+                            var c = 0;
                         } else {
                             database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
-                            message.reply("Il personaggio di nome "+name+" ha sovrascritto il vecchio personaggio.");
+                            var c = 1;
                         };
-
+                        })
+                        if (c= 1){
+                            message.reply("Il personaggio di nome "+name+" ha sovrascritto il vecchio personaggio.");
+                        }
                         message.reply("Ho creato un personaggio di nome " + 
                         message.content.split(" ")[2] +
                         " con "+ message.content.split(" ").slice(-1)[0] + 
                         " monete d'oro iniziali."); // risposta
-
-                        })
                     }
                 }
                 else {
