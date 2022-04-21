@@ -119,23 +119,26 @@ client.on("messageCreate", (message) => {
                         message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
 
-                        message.reply("Ho creato un personaggio di nome " + 
-                        message.content.split(" ")[2] +
-                        " con "+ message.content.split(" ").slice(-1)[0] + 
-                        " monete d'oro iniziali."); // risposta
-
                         var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
                         var tag = message.content.split(" ")[1];
                         var name = message.content.split(" ")[2];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
-                            var database = db.db(ndb);
-                            if (!database.collection(col1).find({id: tag})) {
-                                database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
-                            } else {
-                                message.reply("Il personaggio già esiste.");
-                            };
+                        var database = db.db(ndb);
+
+                        if (!database.collection(col1).find({id: tag})) {
+                            database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
                             
+                        } else {
+                            database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
+                            message.reply("Il personaggio di nome "+name+" ha sovrascritto il vecchio personaggio.");
+                        };
+
+                        message.reply("Ho creato un personaggio di nome " + 
+                        message.content.split(" ")[2] +
+                        " con "+ message.content.split(" ").slice(-1)[0] + 
+                        " monete d'oro iniziali."); // risposta
+
                         })
                     }
                 }
