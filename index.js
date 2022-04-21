@@ -30,8 +30,8 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
-        
 
+        
         //Dare MS ai giocatori  
 
         if (message.content.split(" ")[0] == "!givems"){
