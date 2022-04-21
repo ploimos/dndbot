@@ -125,12 +125,12 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            /*if (!database.collection(col1).find({id: tag})) {*/
+                            /*if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
-                                /*var c = 0;
+                                var c = 0;
                             } else {
-                                database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
-                                var c = 1;
+                                */database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
+                                /*var c = 1;
                             }*/
                         })
 
