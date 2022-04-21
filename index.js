@@ -127,11 +127,10 @@ client.on("messageCreate", (message) => {
                             var database = db.db(ndb);
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
-                                var c = 0;
                             } else {
+                                var name2 = database.collection(col1).find({id: tag}).nome;
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, money: num, ms: 0}})
-                                var c = 1;
-                                message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
+                                message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+name2+"'.");
                             }
                         })
 
