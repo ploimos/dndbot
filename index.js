@@ -129,7 +129,7 @@ client.on("messageCreate", (message) => {
                                 database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
                                 var c = 0;
                             } else {
-                                */database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
+                                */database.collection(col1).updateOne({id: tag}, {nome: name, money: num, ms: 0})
                                 /*var c = 1;
                             }*/
                         })
