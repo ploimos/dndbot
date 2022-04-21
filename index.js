@@ -129,7 +129,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            database.collection(col1).inserteOne({id: tag, nome: name, money: num, exp: 0})
+                            database.collection(col1).insertOne({id: tag, nome: name, money: num, exp: 0})
                         })
                     }
                 }
