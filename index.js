@@ -124,22 +124,22 @@ client.on("messageCreate", (message) => {
                         var name = message.content.split(" ")[2];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
-                        var database = db.db(ndb);
-
-                        if (!database.collection(col1).find({id: tag})) {
-                            database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
-                            var c = 0;
-                        } else {
-                            database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
-                            var c = 1;
-                        };
+                            var database = db.db(ndb);
+                            if (!database.collection(col1).find({id: tag})) {
+                                database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
+                                var c = 0;
+                            } else {
+                                database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
+                                var c = 1;
+                            }
                         })
+
                         if (c= 1){
-                            message.reply("Il personaggio di nome "+name+" ha sovrascritto il vecchio personaggio.");
+                            message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
                         }
-                        message.reply("Ho creato un personaggio di nome " + 
+                        message.reply("Il personaggio di "+tag+" si chiama '" + 
                         message.content.split(" ")[2] +
-                        " con "+ message.content.split(" ").slice(-1)[0] + 
+                        "' e ha "+ message.content.split(" ").slice(-1)[0] + 
                         " monete d'oro iniziali."); // risposta
                     }
                 }
