@@ -131,12 +131,13 @@ client.on("messageCreate", (message) => {
                             } else {
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, money: num, ms: 0}})
                                 var c = 1;
+                                message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
                             }
                         })
 
-                        if (c= 1){
+                        /*if (c= 1){
                             message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
-                        }
+                        }*/
                         message.reply("Il personaggio di "+tag+" si chiama '" + 
                         message.content.split(" ")[2] +
                         "' e ha "+ message.content.split(" ").slice(-1)[0] + 
