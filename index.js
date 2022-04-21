@@ -56,7 +56,7 @@ client.on("messageCreate", (message) => {
                         }
 
                         message.reply("Ho "+a+" " + 
-                        message.content.split(" ").slice(-1) +
+                        Math.abs(message.content.split(" ").slice(-1)) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + "."); // messaggio risposta
 
                         var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazione valori
@@ -99,7 +99,7 @@ client.on("messageCreate", (message) => {
                         }
 
                         message.reply("Ho "+a+" " + 
-                        message.content.split(" ").slice(-1) +
+                        Math.abs(message.content.split(" ").slice(-1)) +
                         " monet"+s+" d'oro a " + message.content.split(" ")[1] + "."); // risposta
 
                         var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
