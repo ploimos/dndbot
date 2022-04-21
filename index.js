@@ -130,7 +130,12 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
+                            if (!database.collection(col1).find({id: tag})) {
+                                database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
+                            } else {
+                                message.reply("Il personaggio già esiste.");
+                            };
+                            
                         })
                     }
                 }
