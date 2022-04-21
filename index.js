@@ -107,7 +107,7 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            database.collection(col1).updateOne({id: name},{$inc: {money: num}}, {upsert: true})
+                            database.collection(col1).updateOne({id: name},{$inc: {mo: num}}, {upsert: true})
                         })
                     }
                 }
@@ -139,9 +139,9 @@ client.on("messageCreate", (message) => {
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
                             if (!database.collection(col1).find({id: tag})) {
-                                database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
+                                database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0})
                             } else {
-                                database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, money: num, ms: 0}})
+                                database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0}})
                                 message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
                             }
                         })
