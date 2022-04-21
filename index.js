@@ -52,7 +52,7 @@ client.on("messageCreate", (message) => {
                         message.content.split(" ").slice(-1) +
                         " milestone"+s+" a " + message.content.split(" ")[1] + "."); // messaggio risposta
 
-                        var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazione valori
+                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazione valori
                         var name = message.content.split(" ")[1];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
@@ -111,10 +111,10 @@ client.on("messageCreate", (message) => {
 
         if (message.content.split(" ")[0] == "!creapg"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
-                var frase = " *'!creapg [Tag_Player] [Nome_PG] [Denaro] [For] [Des] [Cos] [Int] [Car] [Sag]'*."; // comando scritto
-                if (message.content.split(" ")[1].length>1){
-                    if(message.content.split(" ").slice(-1)[0]>3 ||
-                    message.content.split(" ").slice(-1)[0]<=0 ||
+                var frase = " *'!creapg [Tag_Player] [Nome_PG] [Denaro]'*."; // comando scritto
+                if (message.content.split(" ")[1].length>1 ||
+                message.content.split(" ")[2].length>1){
+                    if(message.content.split(" ").slice(-1)[0]<=0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
@@ -124,11 +124,12 @@ client.on("messageCreate", (message) => {
                         " monete d'oro a " + message.content.split(" ")[1] + "."); // risposta
 
                         var num = parseFloat(message.content.split(" ").slice(-1)); // dichiarazioni valori
-                        var name = message.content.split(" ")[1];
+                        var tag = message.content.split(" ")[1];
+                        var name = message.content.split(" ")[2];
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            database.collection(col1).inserteOne({id: name})
+                            database.collection(col1).inserteOne({id: tag, nome: name, money: num, exp: 0})
                         })
                     }
                 }
