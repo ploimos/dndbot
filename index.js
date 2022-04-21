@@ -123,16 +123,16 @@ client.on("messageCreate", (message) => {
                         var tag = message.content.split(" ")[1];
                         var name = message.content.split(" ")[2];
 
-                        /*MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
+                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            if (!database.collection(col1).find({id: tag})) {
+                            /*if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
                                 var c = 0;
                             } else {
                                 database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
                                 var c = 1;
-                            }
-                        })*/
+                            }*/
+                        })
 
                         if (c= 1){
                             message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
