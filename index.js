@@ -18,7 +18,7 @@ var col1 = "tab1" //nome collection 1
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 
 //var MongoClient = require("mongodb").MongoClient;
-var database;
+//var database;
 var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 
@@ -31,7 +31,7 @@ client.on("ready", () => {
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
 
-        
+
         //Dare MS ai giocatori  
 
         if (message.content.split(" ")[0] == "!givems"){
