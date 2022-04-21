@@ -112,7 +112,7 @@ client.on("messageCreate", (message) => {
         if (message.content.split(" ")[0] == "!creapg"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
                 var frase = " *'!creapg [Tag_Player] [Nome_PG] [Denaro]'*."; // comando scritto
-                if (message.content.split(" ")[1].length>1 ||
+                if (message.content.split(" ")[1].length>1 &&
                 message.content.split(" ")[2].length>1){
                     if(message.content.split(" ").slice(-1)[0]<=0 ||
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
