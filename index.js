@@ -154,7 +154,7 @@ client.on("messageCreate", (message) => {
         
         // help differenziato per ruolo admin e utente
         
-        if (message.content.split(" ")[0] == "!help"){
+        /*if (message.content.split(" ")[0] == "!help"){
             if (message.member.roles.cache.has(ruolo)){                     // help admin
                 message.reply("!givems\n"+
                 "*Il comando è '!givems [Tag_Player] [Milestones]'*.\n\n"+
@@ -164,7 +164,7 @@ client.on("messageCreate", (message) => {
                 message.reply("!creapg\n"+
                 "*Il comando è '!creapg ...'*.");
             }
-        }
+        }*/
 
         /*let myStr = message.content
         let firstWord = myStr.split(" ")[0]
