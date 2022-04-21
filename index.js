@@ -128,7 +128,7 @@ client.on("messageCreate", (message) => {
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
                             } else {
-                                var name2 = database.collection(col1).find({id: tag}).toArray()[2]
+                                var name2 = database.collection(col1).find({id: tag})[2]
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, money: num, ms: 0}})
                                 message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+ name2 +"'.");
                             }
