@@ -125,13 +125,13 @@ client.on("messageCreate", (message) => {
 
                         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
                             var database = db.db(ndb);
-                            if (!database.collection(col1).find({id: tag})) {
+                            /*if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, money: num, ms: 0})
                                 var c = 0;
                             } else {
-                                database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
-                                var c = 1;
-                            }
+                                */database.collection(col1).updateOne({id: tag, nome: name, money: num, ms: 0})
+                                /*var c = 1;
+                            }*/
                         })
 
                         if (c= 1){
@@ -154,7 +154,7 @@ client.on("messageCreate", (message) => {
         
         // help differenziato per ruolo admin e utente
         
-        /*if (message.content.split(" ")[0] == "!help"){
+        if (message.content.split(" ")[0] == "!help"){
             if (message.member.roles.cache.has(ruolo)){                     // help admin
                 message.reply("!givems\n"+
                 "*Il comando è '!givems [Tag_Player] [Milestones]'*.\n\n"+
@@ -164,7 +164,7 @@ client.on("messageCreate", (message) => {
                 message.reply("!creapg\n"+
                 "*Il comando è '!creapg ...'*.");
             }
-        }*/
+        }
 
         /*let myStr = message.content
         let firstWord = myStr.split(" ")[0]
