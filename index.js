@@ -43,9 +43,9 @@ client.on("messageCreate", (message) => {
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato le milestones."); // errore valore
                     } else {
-                        if (message.content.split(" ").slice(-1)[0]>1){
+                        if (message.content.split(" ").slice(-1)[0]>1 || message.content.split(" ").slice(-1)[0]<-1){
                             var s = "s"
-                        } else if (message.content.split(" ").slice(-1)[0]>0){
+                        } else if (message.content.split(" ").slice(-1)[0]>0 || message.content.split(" ").slice(-1)[0]<0){
                             var s = ""
                         }
                         message.reply("Ho aggiunto " + 
@@ -80,9 +80,9 @@ client.on("messageCreate", (message) => {
                     isNaN(message.content.split(" ").slice(-1)[0]) == true){
                         message.reply("Hai sbagliato il denaro."); // errore valore
                     } else {
-                        if (message.content.split(" ").slice(-1)[0]>1){
+                        if (message.content.split(" ").slice(-1)[0]>1 || message.content.split(" ").slice(-1)[0]<-1){
                             var s = "e"
-                        } else if (message.content.split(" ").slice(-1)[0]>0){
+                        } else if (message.content.split(" ").slice(-1)[0]>0 || message.content.split(" ").slice(-1)[0]<0){
                             var s = "a"
                         }
                         message.reply("Ho aggiunto " + 
