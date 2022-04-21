@@ -124,7 +124,7 @@ client.on("messageCreate", (message) => {
                         " con "+ message.content.split(" ").slice(-1)[0] + 
                         " monete d'oro iniziali."); // risposta
 
-                        var num = parseFloat(message.content.split(" ").slice(-1)); // dichiarazioni valori
+                        var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
                         var tag = message.content.split(" ")[1];
                         var name = message.content.split(" ")[2];
 
