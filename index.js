@@ -147,7 +147,12 @@ client.on("messageCreate", (message) => {
                                 database.collection(col1).find({id: tag}).toArray(function (err,res){
                                     let old = res[0].nome
                                     console.log("eccolo"+old)
-                                    return old
+                                    //return old
+                                    if (res){
+                                        console.log("yeah")
+                                    }else{
+                                        console.log("aa")
+                                    }
                                 })
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
