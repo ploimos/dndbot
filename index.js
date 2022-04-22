@@ -141,12 +141,12 @@ client.on("messageCreate", async (message) => {
                         var tag = message.content.split(" ")[1];
                         var name = message.content.split(" ")[2];
                         
-                        /*MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async function (err, db){
+                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async function (err, db){
                             var database = db.db(ndb);
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0, lvl: 0})
                             } else {
-                                var a = await database.collection(col1).find({id: tag}).toArray(function (err,res){
+                                await database.collection(col1).find({id: tag}).toArray(function (err,res){
                                     let old = res[0].nome
                                     console.log("dentro"+old)
                                     return old
@@ -157,15 +157,15 @@ client.on("messageCreate", async (message) => {
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
                                 message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+a+"'.");
                             }
-                        })*/
+                        })
 
-                        const kitty = new Cat({ name: message.author.username }); 
+                        /*const kitty = new Cat({ name: message.author.username }); 
                         kitty.save().then(() => console.log('meow'));
                         const io = await Cat.findOne({
                             name: "NakedSnake"
                             
                         })
-                        console.log(io.name);
+                        message.reply(io.name);*/
 
                         /*if (c = 1){
                             message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
