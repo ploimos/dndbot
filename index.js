@@ -1,6 +1,6 @@
 const Discord = require("discord.js")
-//const { MongoClient } = require("mongodb")
-const MongoClient = require("mongodb").MongoClient
+const { MongoClient } = require("mongodb")
+//const MongoClient = require("mongodb").MongoClient
 const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]}
 )
@@ -144,9 +144,9 @@ client.on("messageCreate", (message) => {
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0})
                             } else {
-                                var oldname;
+                                //var oldname;
                                 database.collection(col1).find({id: tag}).toArray(function(err,res){
-                                    oldname = res.name
+                                    console.log(res.name)
                                 })
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
