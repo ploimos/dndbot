@@ -144,7 +144,7 @@ client.on("messageCreate", (message) => {
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0})
                             } else {
-                                database.collection(col1).find({id: tag}).toArray(function (res){
+                                database.collection(col1).find({id: tag}).toArray(function (err,res){
                                     let old = res[0].nome
                                     console.log("eccolo"+old)
                                     return old
