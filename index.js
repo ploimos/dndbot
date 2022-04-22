@@ -144,9 +144,8 @@ client.on("messageCreate", (message) => {
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0})
                             } else {
-                                var oldname;
                                 database.collection(col1).find({id: tag}).toArray(function(err,res){
-                                    oldname = res[0].nome
+                                    var oldname = res[0].nome
                                     console.log(oldname)
                                 })
                                 console.log(oldname)
