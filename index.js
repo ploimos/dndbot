@@ -153,7 +153,7 @@ client.on("messageCreate", (message) => {
                                 console.log(oldname)
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
-                                message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+oldname+"'.");
+                                message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+string(oldname)+"'.");
                             }
                         })
 
