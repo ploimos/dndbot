@@ -1,5 +1,6 @@
 const Discord = require("discord.js")
-const { MongoClient } = require("mongodb")
+//const { MongoClient } = require("mongodb")
+const MongoClient = require("mongodb").MongoClient
 const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]}
 )
