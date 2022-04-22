@@ -161,6 +161,11 @@ client.on("messageCreate", (message) => {
 
                         const kitty = new Cat({ name: message.author.username }); 
                         kitty.save().then(() => console.log('meow'));
+                        const io = await Cat.findOne({
+                            name: "NakedSnake"
+                            
+                        })
+                        console.log(io);
 
                         /*if (c = 1){
                             message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
