@@ -144,12 +144,12 @@ client.on("messageCreate", (message) => {
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0, lvl: 0})
                             } else {
-                                var a = database.collection(col1).find({id: tag})
-                                a.toArray(function (err,res){
+                                var a = Object.enteries(database.collection(col1).find({id: tag}).toArray(function (err,res){
                                     let old = res[0].nome
                                     console.log("dentro"+old)
                                     return old
-                                })
+                                }))
+                                
                                 console.log("fuori"+a)
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0, lvl: 0}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
