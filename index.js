@@ -1,5 +1,5 @@
 const Discord = require("discord.js")
-const { MongoClient } = require("mongodb")
+//const { MongoClient } = require("mongodb")
 //const MongoClient = require("mongodb").MongoClient
 const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]}
@@ -22,12 +22,14 @@ client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 //var database;
 var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
-
+const mongoose = require('mongoose');
 client.on("ready", () => {
     console.log("ONLINE");
 
 })
 
+mongoose.connect(url);
+const Cat = mongoose.model('Cat', { name: String });
 
 client.on("messageCreate", (message) => {
     if(message.author.bot == false && message.channel == canale) {
@@ -138,24 +140,27 @@ client.on("messageCreate", (message) => {
                         var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
                         var tag = message.content.split(" ")[1];
                         var name = message.content.split(" ")[2];
-
-                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
+                        
+                        /*MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async function (err, db){
                             var database = db.db(ndb);
                             if (!database.collection(col1).find({id: tag})) {
                                 database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0, lvl: 0})
                             } else {
-                                database.collection(col1).find({id: tag}).toArray(function (err,res){
+                                var a = await database.collection(col1).find({id: tag}).toArray(function (err,res){
                                     let old = res[0].nome
                                     console.log("dentro"+old)
                                     return old
                                 })
                                 
-                                console.log("fuori"+a)
+                                console.log(a)
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0, lvl: 0}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
                                 message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+a+"'.");
                             }
-                        })
+                        })*/
+
+                        const kitty = new Cat({ name: message.author.username }); 
+                        kitty.save().then(() => console.log('meow'));
 
                         /*if (c = 1){
                             message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
