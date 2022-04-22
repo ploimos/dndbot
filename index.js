@@ -31,7 +31,7 @@ client.on("ready", () => {
 mongoose.connect(url);
 const Cat = mongoose.model('Cat', { name: String });
 
-client.on("messageCreate", (message) => {
+client.on("messageCreate", async (message) => {
     if(message.author.bot == false && message.channel == canale) {
 
 
@@ -165,7 +165,7 @@ client.on("messageCreate", (message) => {
                             name: "NakedSnake"
                             
                         })
-                        console.log(io);
+                        console.log(io.name);
 
                         /*if (c = 1){
                             message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
