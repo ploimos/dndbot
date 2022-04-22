@@ -147,10 +147,10 @@ client.on("messageCreate", (message) => {
                                 var a = database.collection(col1).find({id: tag})
                                 a.toArray(function (err,res){
                                     let old = res[0].nome
-                                    console.log(old)
+                                    console.log("dentro"+old)
                                     return old
                                 })
-                                console.log(a)
+                                console.log("fuori"+a)
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0, lvl: 0}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
                                 message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+a+"'.");
