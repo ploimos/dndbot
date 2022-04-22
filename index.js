@@ -149,7 +149,7 @@ client.on("messageCreate", (message) => {
                                     oldname = res[0].nome
                                     return oldname
                                 })
-                                oldname=onam()
+                                oldname=onam();
                                 console.log("fuoricoll"+oldname)
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
