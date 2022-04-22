@@ -147,7 +147,7 @@ client.on("messageCreate", (message) => {
                                 var oldname;
                                 database.collection(col1).find({id: tag}).toArray(function(err,res){
                                     oldname = res[0].nome
-                                    console.log("dentrocoll"+oldname)
+                                    return oldname
                                 })
                                 console.log("fuoricoll"+oldname)
                                 database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0}})
