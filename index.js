@@ -1,6 +1,7 @@
 const Discord = require("discord.js")
 //const { MongoClient } = require("mongodb")
 //const MongoClient = require("mongodb").MongoClient
+const mongoose = require('mongoose')
 const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]}
 )
@@ -20,16 +21,21 @@ client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 
 //var MongoClient = require("mongodb").MongoClient;
 //var database;
-var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/DnDBot?retryWrites=true&w=majority";
+mongoose.connect(url);
 
-const mongoose = require('mongoose');
 client.on("ready", () => {
     console.log("ONLINE");
-
 })
 
-mongoose.connect(url);
-const Cat = mongoose.model('Cat', { name: String });
+// crea collection
+const tab1 = mongoose.model('Tab1',{
+    id: String, 
+    nome: String, 
+    mo: Number, 
+    ms: Number, 
+    lvl: Number
+})
 
 client.on("messageCreate", async (message) => {
     if(message.author.bot == false && message.channel == canale) {
@@ -153,19 +159,24 @@ client.on("messageCreate", async (message) => {
                                 })
                                 
                                 console.log(a)
-                                database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0, lvl: 0}})
+                                database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0, lvl: 1}})
                                 //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
                                 message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+a+"'.");
                             }
                         })*/
 
-                        const kitty = new Cat({ name: message.author.username }); 
-                        kitty.save().then(() => console.log('meow'));
-                        const io = await Cat.findOne({
+                        const pg = new tab1({ id: tag, nome: name, mo: num, ms: 0, lvl: 1 }); 
+                        pg.save();
+
+
+                        // Il Cat che sta scritto sarebbe tab1, ora bisogna soltanto capire come funziona sta roba
+                        // così possiamo riconvertire tutto il codice e poter aggiustare tutto quanto e trovare 
+                        // una cosa interesante
+
+                        /*const io = await Cat.findOne({
                             name: "NakedSnake"
-                            
                         })
-                        message.reply(io.name);
+                        message.reply(io.name);*/
 
                         /*if (c = 1){
                             message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
