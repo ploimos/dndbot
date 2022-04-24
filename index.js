@@ -154,6 +154,8 @@ client.on("messageCreate", async (message) => {
                                 message.reply("Il nuovo personaggio di "+tag+" ha sovrascritto '"+oldname+"'.");
                             }
                         })
+
+                        // ^^ Aggiustare la cosa qua sopra ^^
                         
                         
                         let pg = await tab1.findOneAndUpdate({id: tag}, {id: tag, nome: name, mo: num, ms: 0, lvl: 1}, {upsert: true})
