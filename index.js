@@ -146,45 +146,29 @@ client.on("messageCreate", async (message) => {
                         var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
                         var tag = message.content.split(" ")[1];
                         var name = message.content.split(" ")[2];
-                        
-                        /*MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async function (err, db){
-                            var database = db.db(ndb);
-                            if (!database.collection(col1).find({id: tag})) {
-                                database.collection(col1).insertOne({id: tag, nome: name, mo: num, ms: 0, lvl: 0})
+                        let bg = tab1.findOne({id:tag}, function (err, res){
+                            if (bg == null) {
+                                message.reply("Nuovo PG");
                             } else {
-                                const a = await database.collection(col1).find({id: tag}).toArray(function (err,res){
-                                    let old = res[0].nome
-                                    console.log("dentro"+old)
-                                    return old
-                                })
-                                
-                                console.log(a)
-                                database.collection(col1).updateOne({id: tag}, {$set: {id: tag, nome: name, mo: num, ms: 0, lvl: 1}})
-                                //message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
-                                message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto '"+a+"'.");
+                                var oldname = bg.nome
+                                message.reply("Il nuovo personaggio di "+tag+" ha sovrascritto '"+oldname+"'.");
                             }
-                        })*/
-
-                        const pg = new tab1({ id: tag, nome: name, mo: num, ms: 0, lvl: 1 }); 
-                        pg.save();
-
-
-                        // Il Cat che sta scritto sarebbe tab1, ora bisogna soltanto capire come funziona sta roba
-                        // così possiamo riconvertire tutto il codice e poter aggiustare tutto quanto e trovare 
-                        // una cosa interesante
-
-                        /*const io = await Cat.findOne({
-                            name: "NakedSnake"
                         })
-                        message.reply(io.name);*/
+                        
+                        
+                        let pg = await tab1.findOneAndUpdate({id: tag}, {id: tag, nome: name, mo: num, ms: 0, lvl: 1}, {upsert: true})
+                        if (message.content.split(" ").slice(-1)[0]==1){
+                            var a = "a"
+                            var b = "e"
+                        }else{
+                            var a = "e"
+                            var b = "i"
+                        }
 
-                        /*if (c = 1){
-                            message.reply("Il personaggio che si chiama '"+name+"' ha sovrascritto il vecchio personaggio.");
-                        }*/
                         message.reply("Il personaggio di "+tag+" si chiama '" + 
                         message.content.split(" ")[2] +
                         "' e ha "+ message.content.split(" ").slice(-1)[0] + 
-                        " monete d'oro iniziali."); // risposta
+                        " monet"+a+" d'oro inizial"+b+"."); // risposta
                     }
                 }
                 else {
