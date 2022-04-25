@@ -7,14 +7,13 @@ const client = new Discord.Client(
 )
 
 var amm = "Non sei admin."
+var amm2 = "Non appartieni alla Land."
 var att = "**Attenzione!**\nLa formula è"
 var utente = "965706832758841364" //id ruolo utente land
 var ruolo = "965547318009016330" //id ruolo admin
 var canale = "965263672421277748" //id canale dove scrive il bot
 var server = "965263672421277746" //id server
 var pass = "cCgYya6YDwnGDH9h" //pass database
-var ndb = "DbDnD" //nome database
-var col1 = "tab1" //nome collection 1
 
 //client.login(process.env.token)
 client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
@@ -45,45 +44,102 @@ client.on("messageCreate", async (message) => {
 
         if (message.content.split(" ")[0] == "!givems"){
             if (message.member.roles.cache.has(ruolo)){
-                var frase = " *'!givems [Tag_Player] [Milestones]'*."; // comando scritto
-                if (message.content.split(" ")[1].length>1){
-                    if(message.content.split(" ").slice(-1)[0]>3 ||
-                    message.content.split(" ").slice(-1)[0]==0 ||
-                    isNaN(message.content.split(" ").slice(-1)[0]) == true){
-                        message.reply("Hai sbagliato le milestones."); // errore valore
+
+                // comando scritto
+                var frase = " *'!givems [Tag_Player] [Milestones]'*."; 
+
+                // dichiarazione valori
+                var tag = message.content.split(" ")[1];
+                var msv = parseInt(message.content.split(" ").slice(-1)[0]);
+
+                if (tag.length > 1){
+                    if(msv > 3 || msv == 0 || isNaN(msv) == true){
+
+                        // errore valore
+                        message.reply("Hai sbagliato le milestones."); 
+
                     } else {
-                        if (message.content.split(" ").slice(-1)[0]>1 || message.content.split(" ").slice(-1)[0]<-1){
-                            var s = "s"
-                        } else if (message.content.split(" ").slice(-1)[0]>0 || message.content.split(" ").slice(-1)[0]<0){
-                            var s = ""
-                        }
 
-                        if (message.content.split(" ").slice(-1)[0]>0){
-                            var a = "aggiunto"
-                        } else if (message.content.split(" ").slice(-1)[0]<0){
-                            var a = "tolto"
-                        }
+                        var msi;
+                        var lvli;
+                        var camb;
 
-                        message.reply("Ho "+a+" " + 
-                        Math.abs(message.content.split(" ").slice(-1)) +
-                        " milestone"+s+" a " + message.content.split(" ")[1] + "."); // messaggio risposta
+                        tab1.findOne({id: tag}, async function (err, res){
+                            if (res == null) {
 
-                        var num = parseInt(message.content.split(" ").slice(-1)); // dichiarazione valori
-                        var name = message.content.split(" ")[1];
+                                // personaggio insesistente
+                                message.reply("Il personaggio di " + tag +" non esiste.");
+                            
+                            } else {
 
-                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
-                            var database = db.db(ndb);
-                            database.collection(col1).updateOne({id: name},{$inc: {ms: num}}, {upsert: true})
+                                if ((msv < 0) && ((res.ms + msv) <= 0)) {
+                                    //risolto problema se si prova a togliere
+                                    //milestones a un PG che sta a livello 1
+                                    msv = 0;
+                                    console.log("non togliere ms ai livelli 1")
+                                }
+
+                                // frase modificata se numero pari a 1 o meno
+                                // o se la ms viene tolta o aggiunta
+                                if (msv > 1 || msv < -1 || msv==0){
+                                    var s = "s"
+                                } else if (msv > 0 || msv < 0){
+                                    var s = ""
+                                }
+                                if (msv > 0){
+                                    var a = "aggiunto"
+                                } else if (msv <= 0){
+                                    var a = "tolto"
+                                }
+
+                                // risposta messaggio
+                                message.reply("Ho " + a + " " + msv +
+                                " milestone" + s + " a " + tag + ".");
+
+                                msi = res.ms;
+                                lvli = res.lvl;
+
+                                //variabili mostrate e assegnate
+                                msf = msi + msv;
+
+                                // determinazione livello
+                                lvlf = livello(msf);
+
+                                // aggiustare livello se cambiano ms                              
+                                await tab1.updateOne({id:tag}, {$set: {ms: msf, lvl: lvlf}}, function (err, res){
+                                    
+                                    if (res == null) {
+
+                                        // personaggio insesistente
+                                        console.log("pg inesistente")
+                                    
+                                    } else {
+
+                                        if (lvlf != lvli){
+                                            
+                                            if (lvlf > lvli) {
+                                                camb = "salito"
+                                            } else if (lvlf < lvli) {
+                                                camb = "sceso"
+                                            }
+
+                                            // frase cambiamento livello
+                                            message.reply("Il personaggio di " + tag + 
+                                            " è " + camb + " al livello " + lvlf + ".");
+
+                                        }
+                                    }
+                                }).clone()
+                            }
                         })
-
-
                     }
-                }
-                else {
-                    message.reply(att+frase); // formula errata
+                } else {
+                    // formula errata
+                    message.reply(att+frase); 
                 }
             } else {
-                message.reply(amm); // messaggio non sei admin
+                // messaggio non sei admin
+                message.reply(amm); 
             }
         }
 
@@ -92,41 +148,110 @@ client.on("messageCreate", async (message) => {
 
         if (message.content.split(" ")[0] == "!givemo"){
             if (message.member.roles.cache.has(ruolo)){
-                var frase = " *'!givemo [Tag_Player] [Denaro]'*."; // comando scritto
-                if (message.content.split(" ")[1].length>1){
-                    if(message.content.split(" ").slice(-1)[0]==0 ||
-                    isNaN(message.content.split(" ").slice(-1)[0]) == true){
-                        message.reply("Hai sbagliato il denaro."); // errore valore
+
+                // comando scritto
+                var frase = " *'!givemo [Tag_Player] [Denaro]'*."; 
+
+                // dichiarazioni valori
+                var tag = message.content.split(" ")[1];
+                var num = Math.round(message.content.split(" ").slice(-1)[0] * 100) / 100; 
+                
+                if (tag.length>1){
+                    if(num == 0 || isNaN(num) == true){
+
+                        // errore valore
+                        message.reply("Hai sbagliato il denaro."); 
                     } else {
-                        if (message.content.split(" ").slice(-1)[0]>1 || message.content.split(" ").slice(-1)[0]<-1){
+
+                        // frase modificata se numero pari a 1 o meno
+                        // o se viene tolto o aggiunto del denaro 
+                        if (num > 1 || num < -1){
                             var s = "e"
-                        } else if (message.content.split(" ").slice(-1)[0]>0 || message.content.split(" ").slice(-1)[0]<0){
+                        } else if (num > 0 || num < 0){
                             var s = "a"
                         }
-                        if (message.content.split(" ").slice(-1)[0]>0){
+                        if (num > 0){
                             var a = "aggiunto"
-                        } else if (message.content.split(" ").slice(-1)[0]<0){
+                        } else if (num < 0){
                             var a = "tolto"
                         }
+                        
+                        tab1.findOneAndUpdate({id: tag}, {$inc: {mo: num}}, function (err, res){
+                            if (res == null) {
 
-                        message.reply("Ho "+a+" " + 
-                        Math.abs(message.content.split(" ").slice(-1)) +
-                        " monet"+s+" d'oro a " + message.content.split(" ")[1] + "."); // risposta
+                                // risposta
+                                message.reply("Il personaggio di " + tag + " non esiste.");
 
-                        var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
-                        var name = message.content.split(" ")[1];
+                            } else {
 
-                        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db){
-                            var database = db.db(ndb);
-                            database.collection(col1).updateOne({id: name},{$inc: {mo: num}}, {upsert: true})
+                                // risposta
+                                message.reply("Ho " + a + " " + Math.abs(num) +
+                                " monet" + s + " d'oro a " + tag + "."); 
+
+                            }
                         })
+                        
                     }
                 }
                 else {
+
+                    // formula errata
+                    message.reply(att+frase); 
+                }
+            } else {
+
+                // messaggio non sei admin
+                message.reply(amm); 
+            }
+        }
+
+
+        // scambio monete tra PG da parte del master
+        if (message.content.split(" ")[0] == "!trade"){
+            if (message.member.roles.cache.has(ruolo)){
+                // comando scritto
+                var frase = " *'!trade [Tag_Player_Mittente] [Tag_Player_Destinatario] [Denaro]'*."; 
+                
+                // dichiarazioni valori
+                var tag2 = message.content.split(" ")[1];
+                var tag = message.content.split(" ")[2];
+                var num = -Math.abs(Math.round(message.content.split(" ").slice(-1)[0] * 100) / 100);
+
+                if (tag.length > 1 && tag2.length > 1 ) {
+                    if (num == 0 || isNaN(num) == true){
+                        
+                        // errore valore
+                        message.reply("Hai sbagliato il denaro."); 
+                    
+                    } else if (tag == tag2) {
+                        
+                        // è inutile
+                        message.reply("Non ha senso dare e togliere lo stesso quantitativo di denaro allo stesso personaggio.");
+
+                    } else {
+
+                        // togli soldi da chi scrive
+                        await tab1.findOneAndUpdate({id: tag2}, {$inc:{mo: num}})
+                        num = -num;
+                                                
+                        // plurale o singolare
+                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}}, {upsert: true})
+
+                        if (num == 1){
+                            var a = "a"
+                        } else {
+                            var a = "e"
+                        }
+
+                        // risposta
+                        message.reply("Il personaggio di " + tag2 + " ha dato "+ num + " monet" + a + " d'oro al personaggio di " 
+                        + tag +".");
+                    }
+                } else {
                     message.reply(att+frase); // formula errata
                 }
             } else {
-                message.reply(amm); // messaggio non sei admin
+                message.reply(amm); // messaggio non sei nella land
             }
         }
 
@@ -135,57 +260,129 @@ client.on("messageCreate", async (message) => {
 
         if (message.content.split(" ")[0] == "!creapg"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
-                var frase = " *'!creapg [Tag_Player] [Nome_PG] [Denaro]'*."; // comando scritto
-                if (message.content.split(" ")[1].length>1 &&
-                message.content.split(" ")[2].length>1){
-                    if(message.content.split(" ").slice(-1)[0]<=0 ||
-                    isNaN(message.content.split(" ").slice(-1)[0]) == true){
-                        message.reply("Hai sbagliato il denaro."); // errore valore
+               
+                // comando scritto
+                var frase = " *'!creapg [Tag_Player] [Nome_PG] [Denaro] [Livello]'*."; 
+                
+                // dichiarazioni valori
+                var tag = message.content.split(" ")[1];
+                var name = message.content.split(" ")[2];
+                var num = Math.round(message.content.split(" ")[3] * 100) / 100;
+                var level = message.content.split(" ")[4];
+
+                // se il valore non è inserito, il pg è livello 1
+                // se vuoi togliere sta cosa, basta togliere commento
+                // nell'IF che sta qua sotto "|| isNaN(level) == true"
+                if (isNaN(level) == true){ 
+                    level = 1
+                }
+                
+                if (tag.length > 1 && name.length > 1) {
+                    if ((num <= 0 || isNaN(num) == true)||
+                    (level < 1 /*|| isNaN(level) == true*/ || level > 20)){
+                        
+                        // errore valore
+                        message.reply("Hai sbagliato il denaro o il livello."); 
+                    
                     } else {
 
-                        var num = Math.round(message.content.split(" ").slice(-1) * 100) / 100; // dichiarazioni valori
-                        var tag = message.content.split(" ")[1];
-                        var name = message.content.split(" ")[2];
-                        let bg = tab1.findOne({id:tag}, function (err, res){
-                            if (bg == null) {
-                                message.reply("Nuovo PG");
+                        // controlla se il pg è nuovo
+                        tab1.findOne({id:tag}, function (err, res) {
+                            if (res == null) {
+                                message.reply(tag+" ha creato un nuovo personaggio.");
                             } else {
-                                var oldname = bg.nome
-                                message.reply("Il nuovo personaggio di "+tag+" ha sovrascritto '"+oldname+"'.");
+                                message.reply("Il nuovo personaggio di " + tag + 
+                                " ha sovrascritto '" + res.nome + "'.");
                             }
                         })
 
-                        // ^^ Aggiustare la cosa qua sopra ^^
-                        
-                        
-                        let pg = await tab1.findOneAndUpdate({id: tag}, {id: tag, nome: name, mo: num, ms: 0, lvl: 1}, {upsert: true})
-                        if (message.content.split(" ").slice(-1)[0]==1){
+                        // valore delle milestones
+                        var msv = 0;
+                        msv = milestones(level);
+                                                
+                        // plurale o singolare
+                        await tab1.findOneAndUpdate({id: tag}, {id: tag, nome: name, mo: num, ms: msv, lvl: level}, {upsert: true})
+                        if (num == 1){
                             var a = "a"
                             var b = "e"
-                        }else{
+                        } else {
                             var a = "e"
                             var b = "i"
                         }
+                        if (msv == 1){
+                            var s = ""
+                        } else {
+                            var s = "s"
+                        }
 
-                        message.reply("Il personaggio di "+tag+" si chiama '" + 
-                        message.content.split(" ")[2] +
-                        "' e ha "+ message.content.split(" ").slice(-1)[0] + 
-                        " monet"+a+" d'oro inizial"+b+"."); // risposta
+                        // risposta
+                        message.reply("Il personaggio di " + tag + " si chiama '" + name 
+                        + "', è di "+ level +"° livello con "+ msv +" milestone"+ s
+                        + " e ha " + num + " monet" + a + " d'oro inizial" + b + "."); 
                     }
-                }
-                else {
+                } else {
                     message.reply(att+frase); // formula errata
                 }
             } else {
-                message.reply(amm); // messaggio non sei admin
+                message.reply(amm2); // messaggio non sei nella land
+            }
+        }
+
+
+        // scambio denaro
+        if (message.content.split(" ")[0] == "!dai"){
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
+                // comando scritto
+                var frase = " *'!dai [Tag_Player_Beneficiario] [Denaro]'*."; 
+                
+                // dichiarazioni valori
+                var tag2 = "<@"+message.author.id+">";
+                var tag = message.content.split(" ")[1];
+                var num = -Math.abs(Math.round(message.content.split(" ").slice(-1)[0] * 100) / 100);
+
+                if (tag.length > 1) {
+                    if (num == 0 || isNaN(num) == true){
+                        
+                        // errore valore
+                        message.reply("Hai sbagliato il denaro."); 
+                    
+                    } else if (tag == tag2) {
+                        
+                        // è inutile
+                        message.reply("Perché vuoi dare i **tuoi** soldi a ...*te stesso*?");
+
+                    } else {
+
+                        // togli soldi da chi scrive
+                        await tab1.findOneAndUpdate({id: tag2}, {$inc:{mo: num}})
+                        num = -num;
+                                                
+                        // plurale o singolare
+                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}}, {upsert: true})
+
+                        if (num == 1){
+                            var a = "a"
+                        } else {
+                            var a = "e"
+                        }
+
+                        // risposta
+                        message.reply("Il personaggio di " + tag2 + " ha dato "+ num + " monet" + a + " d'oro al personaggio di " 
+                        + tag +".");
+                    }
+                } else {
+                    message.reply(att+frase); // formula errata
+                }
+            } else {
+                message.reply(amm2); // messaggio non sei nella land
             }
         }
 
         
         // help differenziato per ruolo admin e utente
         
-        if (message.content.split(" ")[0] == "!help"){
-            if (message.member.roles.cache.has(ruolo)){                     // help admin
+        if (message.content.split(" ")[0] == "!help") {
+            if (message.member.roles.cache.has(ruolo)) {                     // help admin
                 message.reply("!givems\n"+
                 "*Il comando è '!givems [Tag_Player] [Milestones]'*.\n\n"+
                 "!givemo\n"+
@@ -248,7 +445,69 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
         // decidere se inserire un messaggio variabile per dare il benvenuto ai giocatori
         // e se fare in modo che il messaggio sia più caloroso o comunque piacevole
         // chiedere agli altri master!!!
-        txtChannel.send("<@&"+utente+">\nDate il benvenuto a <@" +
+        txtChannel.send("<@&" + utente + ">\nDate il benvenuto a <@" +
         newMember.id + "> tra i nuovi giocatori della land!");
     }
 })
+
+function livello(mss){
+    var lvls = 0;
+    if (mss < 2) {
+        lvls = 1
+    } else if (mss < 6) {
+        lvls = 2
+    } else if (mss < 12) {
+        lvls = 3
+    } else if (mss < 20) {
+        lvls = 4
+    } else if (mss < 30) {
+        lvls = 5
+    } else if (mss < 40) {
+        lvls = 6
+    } else if (mss < 50) {
+        lvls = 7
+    } else if (mss < 60) {
+        lvls = 8
+    } else if (mss < 72) {
+        lvls = 9
+    } else if (mss < 84) {
+        lvls = 10
+    } else if (mss < 96) {
+        lvls = 11
+    } else if (mss < 111) {
+        lvls = 12
+    } else if (mss < 126) {
+        lvls = 13
+    } else if (mss < 141) {
+        lvls = 14
+    } else if (mss < 156) {
+        lvls = 15
+    } else if (mss < 171) {
+        lvls = 16
+    } else if (mss < 186) {
+        lvls = 17
+    } else if (mss < 206) {
+        lvls = 18
+    } else if (mss < 226) {
+        lvls = 19
+    } else if (mss >= 226) {
+        lvls = 20
+    }
+    return lvls
+}
+
+function milestones(level){
+    var msv = 0;
+    if (level <= 6) {
+        msv = (level)*(level-1)
+    } else if (level <= 9) {
+        msv = (level-3)*10
+    } else if (level <= 12) {
+        msv = ((level-3)*10)+((level-9)*2)
+    } else if (level <= 18) {
+        msv = ((level-3)*10)+((level-9)*2)+((level-12)*3)
+    } else if (level <= 20) {
+        msv = ((level-3)*10)+((level-9)*2)+((level-12)*3)+((level-18)*5)
+    }
+    return msv
+}
