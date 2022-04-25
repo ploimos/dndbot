@@ -39,9 +39,7 @@ const tab1 = mongoose.model('Tab1',{
 client.on("messageCreate", async (message) => {
     if(message.author.bot == false && message.channel == canale) {
 
-
         //Dare MS ai giocatori  
-
         if (message.content.split(" ")[0] == "!givems"){
             if (message.member.roles.cache.has(ruolo)){
 
@@ -145,7 +143,6 @@ client.on("messageCreate", async (message) => {
 
 
         // Dare denaro ai giocatori
-
         if (message.content.split(" ")[0] == "!givemo"){
             if (message.member.roles.cache.has(ruolo)){
 
@@ -230,12 +227,17 @@ client.on("messageCreate", async (message) => {
 
                     } else {
 
+                        //fai due findone per trovare i valori
+                        //poi fai due findoneandupdate con il $set
+                        //entrambi con await
+                        //dovrebbe funzionare, nel caso F
+
                         // togli soldi da chi scrive
                         await tab1.findOneAndUpdate({id: tag2}, {$inc:{mo: num}})
                         num = -num;
                                                 
                         // plurale o singolare
-                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}}, {upsert: true})
+                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}})
 
                         if (num == 1){
                             var a = "a"
@@ -257,7 +259,6 @@ client.on("messageCreate", async (message) => {
 
 
         // creare PG
-
         if (message.content.split(" ")[0] == "!creapg"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
                
@@ -358,7 +359,7 @@ client.on("messageCreate", async (message) => {
                         num = -num;
                                                 
                         // plurale o singolare
-                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}}, {upsert: true})
+                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}})
 
                         if (num == 1){
                             var a = "a"
@@ -367,8 +368,8 @@ client.on("messageCreate", async (message) => {
                         }
 
                         // risposta
-                        message.reply("Il personaggio di " + tag2 + " ha dato "+ num + " monet" + a + " d'oro al personaggio di " 
-                        + tag +".");
+                        message.reply("Il personaggio di " + tag + " ha ricevuto "+ num + " monet" + a + " d'oro dal personaggio di " 
+                        + tag2 +".");
                     }
                 } else {
                     message.reply(att+frase); // formula errata
@@ -378,6 +379,27 @@ client.on("messageCreate", async (message) => {
             }
         }
 
+
+        // mostra info pg
+        if (message.content.split(" ")[0] == "!infopg"){
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
+                // comando scritto
+                var frase = " *'!infopg'*."; 
+                var tag = "@<"+message.author.id+">";
+
+                //devi ancora finire, ricordati di fare tutto
+                //ATTENZIONE
+                //E devi fare anche quello per i master che possono vedere
+                //il PG che vogliono
+
+                tab1.findOne({id: tag})
+                message.reply("Il personaggio di " + tag2 + " ha dato "+ num + " monet" + a + " d'oro al personaggio di " 
+                + tag +".");
+
+            } else {
+                message.reply(amm2); // messaggio non sei nella land
+            }
+        }
         
         // help differenziato per ruolo admin e utente
         
