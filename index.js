@@ -152,7 +152,6 @@ client.on("messageCreate", async (message) => {
                                                     message.reply("Il personaggio di " + tag + 
                                                     " è " + camb + " al tier " + tief + ".");
                                                 }
-
                                             }
                                         }
                                     }).clone()
@@ -258,9 +257,11 @@ client.on("messageCreate", async (message) => {
                         if (!res) {
                             message.reply("Il personaggio di " + tag + " non esiste.");
                         } else {
-                            message.reply("Le info generali del personaggio di " + tag + 
-                            " sono:\n**Nome**: " + res.nome + ",\n**Livello**: " + res.lvl +
-                            ",\n**Denaro**: " + res.mo + ",\n**Milestones**: " + res.ms + ".");
+                            message.reply("**INFO PERSONAGGIO**:\n\n" +
+                            "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
+                            ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl + 
+                            ",\n**Denaro**: " + res.mo + ",\n**Milestones**: " + res.ms + 
+                            ",\n**Ultima Sessione**: " + res.date.toDateString() + ".");
                         }
                     })
                 } else {
@@ -276,8 +277,8 @@ client.on("messageCreate", async (message) => {
             if (message.member.roles.cache.has(ruolo)){
                 // comando scritto
                 var frase = " *'!showall'*.";
-                mess = "Questa è la lista dei personaggi attivi:\n";
-                tab1.find((function (err, res){
+                mess = "**LISTA DEI PERSONAGGI**:\n";
+                tab1.find().sort({date: "desc", ms : "desc", nome: "asc"}).exec(function (err, res){
 
                     if (!res){
                         message.channel.send("Qualcosa è andato storto.");
@@ -291,12 +292,14 @@ client.on("messageCreate", async (message) => {
                     }
                     
                     repeat(function () { mess = mess + "\n**Tag**: " + res[times-1].id + 
-                    "\n**Nome**: " + res[times-1].nome + ",\n**Livello**: " + res[times-1].lvl +
-                    ",\n**Denaro**: " + res[times-1].mo + ",\n**Milestones**: " + res[times-1].ms + ".\n";
+                    "\n**Nome**: " + res[times-1].nome + ",\n**Tier**: " + res[times-1].tier + 
+                    ",\n**Livello**: " + res[times-1].lvl + ",\n**Denaro**: " + res[times-1].mo + 
+                    ",\n**Milestones**: " + res[times-1].ms + ",\n**Ultima Sessione**: " + 
+                    res[times-1].date.toDateString() + ".\n";
                     times = times-1 }, times);
 
                     message.channel.send(mess)
-                }))
+                })
             } else {
                 message.reply(amm); // messaggio non sei admin
             }
@@ -518,9 +521,11 @@ client.on("messageCreate", async (message) => {
                     if (!res) {
                         message.reply("Il personaggio di " + tag + " non esiste.");
                     } else {
-                        message.reply("Le info generali del personaggio di " + tag + 
-                        " sono:\n**Nome**: " + res.nome + ",\n**Livello**: " + res.lvl +
-                        ",\n**Denaro**: " + res.mo + ",\n**Milestones**: " + res.ms + ".");
+                        message.reply("**INFO PERSONAGGIO**:\n\n" +
+                            "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
+                            ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl + 
+                            ",\n**Denaro**: " + res.mo + ",\n**Milestones**: " + res.ms + 
+                            ",\n**Ultima Sessione**: " + res.date.toDateString() + ".");
                     }
                 })
 
