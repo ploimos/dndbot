@@ -33,7 +33,9 @@ const tab1 = mongoose.model('Tab1',{
     nome: String, 
     mo: Number, 
     ms: Number, 
-    lvl: Number
+    lvl: Number,
+    tier: Number,
+    date: Date 
 })
 
 client.on("messageCreate", async (message) => {
@@ -96,11 +98,12 @@ client.on("messageCreate", async (message) => {
                                     }
 
                                     // risposta messaggio
-                                    message.reply("Ho " + a + " " + msv +
+                                    message.reply("Ho " + a + " " + Math.abs(msv) +
                                     " milestone" + s + " a " + tag + ".");
 
                                     msi = res.ms;
                                     lvli = res.lvl;
+                                    tiei = res.tier;
 
                                     //variabili mostrate e assegnate
                                     msf = msi + msv;
@@ -108,8 +111,15 @@ client.on("messageCreate", async (message) => {
                                     // determinazione livello
                                     lvlf = livello(msf);
 
+                                    // determinazione tier
+                                    tief = ttier(lvlf);
+
+                                    // data sessione
+                                    var today = new Date();
+                                    var data = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
                                     // aggiustare livello se cambiano ms                              
-                                    await tab1.updateOne({id:tag}, {$set: {ms: msf, lvl: lvlf}}, function (err, res){
+                                    await tab1.updateOne({id:tag}, {$set: {ms: msf, lvl: lvlf, date: data, tier: tief}}, function (err, res){
                                         
                                         if (res == null) {
 
@@ -129,6 +139,19 @@ client.on("messageCreate", async (message) => {
                                                 // frase cambiamento livello
                                                 message.reply("Il personaggio di " + tag + 
                                                 " è " + camb + " al livello " + lvlf + ".");
+
+                                                if (tief != tiei){
+
+                                                    if (tief > tiei) {
+                                                        camb = "salito"
+                                                    } else if (tief < tiei) {
+                                                        camb = "sceso"
+                                                    }
+
+                                                    // frase cambiamento tier
+                                                    message.reply("Il personaggio di " + tag + 
+                                                    " è " + camb + " al tier " + tief + ".");
+                                                }
 
                                             }
                                         }
@@ -401,9 +424,12 @@ client.on("messageCreate", async (message) => {
                         // valore delle milestones
                         var msv = 0;
                         msv = milestones(level);
+                        tie = ttier(level);
+                        var today = new Date();
+                        var data = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                                                 
                         // plurale o singolare
-                        await tab1.findOneAndUpdate({id: tag}, {id: tag, nome: name, mo: num, ms: msv, lvl: level}, {upsert: true})
+                        await tab1.findOneAndUpdate({id: tag}, {id: tag, nome: name, mo: num, ms: msv, lvl: level, tier: tie, date: data}, {upsert: true})
                         if (num == 1){
                             var a = "a"
                             var b = "e"
@@ -649,4 +675,16 @@ function milestones(level){
         msv = ((level-3)*10)+((level-9)*2)+((level-12)*3)+((level-18)*5)
     }
     return msv
+}
+
+function ttier(level){
+    var tier = 1;
+    tier = Math.ceil(level/4);
+    return tier;
+}
+
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
 }
