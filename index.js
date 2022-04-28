@@ -29,13 +29,28 @@ client.on("ready", () => {
 
 // crea collection
 const tab1 = mongoose.model('Tab1',{
-    id: String, 
-    nome: String, 
-    mo: Number, 
-    ms: Number, 
+    id: String,
+    nome: String,
+    mo: Number,
+    ms: Number,
     lvl: Number,
     tier: Number,
-    date: Date 
+    date: Date
+})
+
+const tab2 = mongoose.model('Tab2',{
+    id: String,
+    type: String,
+    date: Date
+})
+
+const tab3 = mongoose.model('Tab3',{
+    id: String,
+    nome: String,
+    type: String,
+    mo: Number,
+    wght: Number,
+    qnt: Number
 })
 
 client.on("messageCreate", async (message) => {
@@ -484,22 +499,39 @@ client.on("messageCreate", async (message) => {
 
                     } else {
 
-                        // togli soldi da chi scrive
-                        await tab1.findOneAndUpdate({id: tag2}, {$inc:{mo: num}})
-                        num = -num;
-                                                
-                        // plurale o singolare
-                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}})
+                        tab1.findOne({id: tag2}, async function (err, res){
+                            
+                            // singolare o plurale
+                            if (Math.abs(num) == 1){
+                                var a = "a"
+                            } else {
+                                var a = "e"
+                            }
+                            
+                            if (!res) {
+                                message.reply("Il personaggio di " + tag2 + " non esiste.");
+                            } else if (res.mo < Math.abs(num)) {
+                                message.reply("Nessun personaggio può indebitarsi.\n"+
+                                "Attualmente disponi di " + res.mo + " monet" + a + " d'oro.");
+                            } else {
+                                await tab1.findOne({id: tag}, async function (err, res){
+                                    if (!res) {
+                                        message.reply("Il personaggio di " + tag + " non esiste.");
+                                    } else {
+                                        // togli soldi da chi scrive
+                                        await tab1.findOneAndUpdate({id: tag2}, {$inc:{mo: num}})
+                                        num = -num;
+                                                                
+                                        // plurale o singolare
+                                        await tab1.findOneAndUpdate({id: tag}, {$inc:{mo: num}})
 
-                        if (num == 1){
-                            var a = "a"
-                        } else {
-                            var a = "e"
-                        }
-
-                        // risposta
-                        message.reply("Il personaggio di " + tag + " ha ricevuto "+ num + " monet" + a + " d'oro dal personaggio di " 
-                        + tag2 +".");
+                                        // risposta
+                                        message.reply("Il personaggio di " + tag + " ha ricevuto " +
+                                        num + " monet" + a + " d'oro dal personaggio di " + tag2 + ".");
+                                    }
+                                }).clone()
+                            }
+                        })
                     }
                 } else {
                     message.reply(att+frase); // formula errata
@@ -533,11 +565,124 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm2); // messaggio non sei nella land
             }
         }
-        
+
+
+        // Downtime
+        if (message.content.split(" ")[0] == "!downtime"){
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
+                // comando scritto
+                var frase = " *'!downtime [Tipo_di_Downtime] [Giorni]'*.\n"
+                + "Usa un'unica parola per il tipo di Downtime.";
+                
+                // dichiarazioni valori
+                var tag = "<@"+message.author.id+">";
+                var tipo = message.content.split(" ")[1];
+                var num = Math.abs(Math.round(message.content.split(" ")[2]));
+                giorno = new Date(oggi());
+
+                if (message.content.split(" ").length > 3) {
+                    message.reply(att+frase);
+                } else {
+                    if (tipo == "" || tipo == null) {
+                        tab2.findOne({id: tag}, async function (err, res){
+                            if (!res){
+                                message.reply("Il personaggio di " + tag + " non ha un downtime attivo.")
+                            } else {
+                                if (res.date > giorno) {
+                                    message.reply("Il downtime di " + tag + " non è ancora terminato.")
+                                } else {
+                                    message.reply("Il downtime di " + res.type + " effettuato da " + tag + 
+                                    " è terminato.\nContattare un <@&" + ruolo + "> per ottenere i risultati.")
+                                    await tab2.deleteOne({id: tag})
+                                }
+                            }
+                        })
+                    } else {
+                        if (tipo.length > 1) {
+                            if (num == null || num <= 0 || num == "" || isNaN(num)) {
+                                // valore predefinito 7 giorni
+                                num = 7;
+                            }
+                            data = addDays(giorno, num)
+                            
+                            tab2.findOne({id: tag}, function (err, res){
+                                if (!res){
+                                    if (num == 1) {
+                                        a = "o"
+                                    } else {
+                                        a = "i"
+                                    }
+                                    const dt = new tab2({id: tag, type: tipo, date: data})
+                                    dt.save()
+                                    message.reply("Il downtime di " + tipo + " che verrà effettuato da " + tag +
+                                    ", terminerà tra " + num + " giorn" + a + ".")
+                                } else {
+                                    if (giorno < res.date){
+                                        message.reply("Il personaggio di " + tag + " non può avviare un secondo downtime " +
+                                        "senza aver terminato quello in corso.\nIl downtime attuale termina il giorno: " 
+                                        + res.date.toDateString() + ".")
+                                    } else {
+                                        message.reply("Devi prima concludere il downtime avviato.\n||Scrivi '!downtime' "+ 
+                                        "così puoi riscattare il downtime concluso.||")
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
+            } else {
+                message.reply(amm2); // messaggio non sei nella land
+            }
+        }
+
+
+        // Mercato 
+        if (message.content.split(" ")[0] == "!mercato"){
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
+                // comando scritto
+                var frase = " *'!mercato [Tipo_Oggetto]'*.\n"+
+                "All'interno del [Tipo_Oggetto] puoi scrivere una categoria tra queste:\n"+
+                "'Armi' e anche 'Mischia', 'Distanza', 'Semplici', 'Guerra'\n"+
+                "Proprietà come 'Lancio', 'Leggera', 'Pesante', 'Accurata', 'Due Mani', " +
+                "'Gittata', 'Munizioni', 'Portata', 'Ricarica', 'Speciale', 'Versatile'.\n"+
+                "'Armature' e anche 'Leggere', 'Medie', 'Pesanti', 'Scudi'\n"+
+                "Proprietà come 'Svantaggio', 'Forza'\n"+
+                ""
+                //appunta tutti i tipi e proprietà
+                //usa il match per capire se stanno dentro le proprietà
+                //stila una lista di oggetti in funzione delle proprietà
+                //poi fai compra e vendi come comandi
+                //dove scrivono comando più oggetto
+                //che per trovarlo basterà sempre usare il find + match(?)
+                //aggiungici pure la cosa che se lo hanno acquistato il 
+                //prezzo aumenta al doppio del numero negativo
+                //-1 => +2% => 1.02
+                //prezzo diminuisce al pari del numero positivo
+                //1 => -1% => 1.01
+                //Nel caso cambiamo la proporzione
+                //O eventualmente aggiungiamo una scadenza entro la quale 
+                //Viene rifornito il mercato o vengono rivendute le cose in eccesso
+                //Comando vendita invece si ottiene la metà del valore dell'oggetto
+                //maggiorato o diminuito in base al mercato in quel momento e dopo
+                //la cosa aggiunta/tolta, il mercato varia il numeretto sull'oggetto
+
+                // dichiarazioni valori
+                sp = message.content.split(" ").length.toString();
+                mess = message.content.replace("!mercato", "").replace(/\s+/g, '').toLowerCase();
+                if (sp == 1)
+                    message.reply(att+frase)
+
+            } else {
+                message.reply(amm2); // messaggio non sei nella land
+            }
+        }
+
 
         // help differenziato per ruolo admin e utente
         if (message.content.split(" ")[0] == "!help") {
-            if (message.member.roles.cache.has(ruolo)) {                     // help admin
+
+            // help admin
+            if (message.member.roles.cache.has(ruolo)) {
                 message.reply("**COMANDI PER MASTER LAND**\n\n"
                 +"**!givems**\n"+
                 "*Il comando è '!givems [Tag_Player] [Milestones]'*\ne permette di assegnare le milestones al personaggio.\n\n"
@@ -548,17 +693,27 @@ client.on("messageCreate", async (message) => {
                 +"**!showall**\n"+
                 "*Il comando è '!showall'*\ne mostra i dati di tutti i personaggi.\n\n"
                 +"**!trade**\n"+
-                "*Il comando è '!trade [Tag_Player_Mittente] [Tag_Player_Destinatario] [Denaro]'*\ne permette di far scambiare denaro dal primo personaggio al secondo.\n\n"
+                "*Il comando è '!trade [Tag_Player_Mittente] [Tag_Player_Destinatario] [Denaro]'*\n"+
+                "e permette di far scambiare denaro dal primo personaggio al secondo.\n\n"
                 );
             }
-            if (message.member.roles.cache.has(utente)){              // help giocatori
+
+            // help giocatori
+            if (message.member.roles.cache.has(utente)){
                 message.reply("**COMANDI PER GIOCATORI LAND**\n\n"
                 +"**!creapg**\n"+
-                "*Il comando è '!creapg [Tag_Player] [Nome_PG] [Denaro] [Livello]'*\ne permette di creare il personaggio inserendo nome, denaro in monete d'oro e livello.\n\n"
+                "*Il comando è '!creapg [Tag_Player] [Nome_PG] [Denaro] [Livello]'*\n"+
+                "e permette di creare il personaggio inserendo nome, denaro in monete d'oro e livello.\n\n"
                 +"**!dai**\n"+
-                "*Il comando è '!dai [Tag_Player_Beneficiario] [Denaro]'*\ne permette ad un giocatore di dare un ammontare di denaro al personaggio taggato.\n\n"
+                "*Il comando è '!dai [Tag_Player_Beneficiario] [Denaro]'*\n"+
+                "e permette ad un giocatore di dare un ammontare di denaro al personaggio taggato.\n\n"
                 +"**!infopg**\n"+
                 "*Il comando è '!infopg'*\ne permette di visualizzare i dati del proprio personaggio.\n\n"
+                +"**!downtime**\n"+
+                "*Il comando è '!downtime [Tipo_di_Downtime] [Giorni]'*.\n"
+                +"Usa un'unica parola per il tipo di Downtime.\n"
+                +"Scrivendo solo '!downtime' puoi riscattare e/o controllare il DT concluso o attivo.\n"
+                +"Ti permette di avviare un downtime di un tipo qualsiasi per la durata prestabilita (in giorni).\n"
                 );
             }
         }
@@ -692,4 +847,10 @@ function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
+}
+
+function oggi() {
+    var today = new Date();
+    var data = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    return data;
 }
