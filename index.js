@@ -622,7 +622,7 @@ client.on("messageCreate", async (message) => {
                                         "senza aver terminato quello in corso.\nIl downtime attuale termina il giorno: " 
                                         + res.date.toDateString() + ".")
                                     } else {
-                                        message.reply("Devi prima concludere il downtime avviato.\n||Scrivi '!downtime' "+ 
+                                        message.reply("Devi prima riscuotere il downtime che hai concluso.\n||Scrivi '!downtime' "+ 
                                         "così puoi riscattare il downtime concluso.||")
                                     }
                                 }
@@ -647,8 +647,14 @@ client.on("messageCreate", async (message) => {
                 "'Gittata', 'Munizioni', 'Portata', 'Ricarica', 'Speciale', 'Versatile'.\n"+
                 "'Armature' e anche 'Leggere', 'Medie', 'Pesanti', 'Scudi'\n"+
                 "Proprietà come 'Svantaggio', 'Forza'\n"+
-                ""
-                //appunta tutti i tipi e proprietà
+                "'Equipaggiamento' e anche 'Focus', 'Munizioni', 'Simbolo'.\n"+
+                "'Strumenti' e anche 'Giochi', 'Artigiano', 'Musicali'.\n"+
+                "'Cavalcature' e anche 'Animali'.\n"+
+                "'Finimenti' e anche 'Sella'.\n"+
+                "'Veicoli' e anche 'Imbarcazioni', 'Volanti'.\n"+
+                "'Merci' e anche 'Alimenti', 'Materiali'."
+
+                //appunta tutti i tipi e proprietà 
                 //usa il match per capire se stanno dentro le proprietà
                 //stila una lista di oggetti in funzione delle proprietà
                 //poi fai compra e vendi come comandi
@@ -658,10 +664,10 @@ client.on("messageCreate", async (message) => {
                 //prezzo aumenta al doppio del numero negativo
                 //-1 => +2% => 1.02
                 //prezzo diminuisce al pari del numero positivo
-                //1 => -1% => 1.01
+                //1 => -1% => 0.99
                 //Nel caso cambiamo la proporzione
                 //O eventualmente aggiungiamo una scadenza entro la quale 
-                //Viene rifornito il mercato o vengono rivendute le cose in eccesso
+                //viene rifornito il mercato o vengono rivendute le cose in eccesso
                 //Comando vendita invece si ottiene la metà del valore dell'oggetto
                 //maggiorato o diminuito in base al mercato in quel momento e dopo
                 //la cosa aggiunta/tolta, il mercato varia il numeretto sull'oggetto
