@@ -1,4 +1,5 @@
 const Discord = require("discord.js")
+const { MongoParseError } = require("mongodb")
 //const { MongoClient } = require("mongodb")
 //const MongoClient = require("mongodb").MongoClient
 const mongoose = require('mongoose')
@@ -46,18 +47,16 @@ const tab2 = mongoose.model('Tab2',{
 
 const tab3 = mongoose.model('Tab3',{
     id: String,
-    nome: String,
+    name: String,
     type: String,
     mo: Number,
-    wght: Number,
-    qnt: Number
 })
 
 client.on("messageCreate", async (message) => {
     if(message.author.bot == false && message.channel == canale) {
 
         //Dare MS ai giocatori  
-        if (message.content.split(" ")[0] == "!givems"){
+        if (message.content.split(" ")[0].toLowerCase() == "!givems"){
             if (message.member.roles.cache.has(ruolo)){
 
                 // comando scritto
@@ -67,7 +66,9 @@ client.on("messageCreate", async (message) => {
                 var tag = message.content.split(" ")[1];
                 var msv = parseInt(message.content.split(" ").slice(-1)[0]);
 
-                if (tag.length > 1){
+                if (message.content.split(" ").length == 1) {
+                    message.reply(att+frase); // formula errata
+                } else if (tag.length > 1){
                     if(msv > 3 || msv == 0 || isNaN(msv) == true){
 
                         // errore valore
@@ -186,7 +187,7 @@ client.on("messageCreate", async (message) => {
 
 
         // Dare denaro ai giocatori
-        if (message.content.split(" ")[0] == "!givemo"){
+        if (message.content.split(" ")[0].toLowerCase() == "!givemo"){
             if (message.member.roles.cache.has(ruolo)){
 
                 // comando scritto
@@ -196,7 +197,9 @@ client.on("messageCreate", async (message) => {
                 var tag = message.content.split(" ")[1];
                 var num = Math.round(message.content.split(" ").slice(-1)[0] * 100) / 100; 
                 
-                if (tag.length>1){
+                if (message.content.split(" ").length == 1) {
+                    message.reply(att+frase); // formula errata
+                } else if (tag.length>1){
                     if(num == 0 || isNaN(num) == true){
 
                         // errore valore
@@ -243,12 +246,8 @@ client.on("messageCreate", async (message) => {
                                 }
                             }
                         })
-
-                        
-                        
                     }
-                }
-                else {
+                } else {
 
                     // formula errata
                     message.reply(att+frase); 
@@ -261,13 +260,16 @@ client.on("messageCreate", async (message) => {
         }
 
         // mostra info pg
-        if (message.content.split(" ")[0] == "!show"){
+        if (message.content.split(" ")[0].toLowerCase() == "!show"){
             if (message.member.roles.cache.has(ruolo)){
                 // comando scritto
                 var frase = " *'!show [Tag_Player]'*."; 
                 var tag = message.content.split(" ").slice(-1)[0];
 
-                if (tag.length > 1){
+                if (message.content.split(" ").length == 1) {
+                    // formula errata
+                    message.reply(att+frase); 
+                } else if (tag.length > 1){
                     tab1.findOne({id: tag}, async function (err, res) {
                         if (!res) {
                             message.reply("Il personaggio di " + tag + " non esiste.");
@@ -275,20 +277,22 @@ client.on("messageCreate", async (message) => {
                             message.reply("**INFO PERSONAGGIO**:\n\n" +
                             "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                             ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl + 
-                            ",\n**Denaro**: " + res.mo + ",\n**Milestones**: " + res.ms + 
+                            ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms + 
                             ",\n**Ultima Sessione**: " + res.date.toDateString() + ".");
                         }
                     })
                 } else {
-                    message.reply(att+frase); // formula errata
+                    // formula errata
+                    message.reply(att+frase); 
                 }
             } else {
-                message.reply(amm); // messaggio non sei admin
+                // messaggio non sei admin
+                message.reply(amm); 
             }
         }
 
         // mostra info di tutti i pg
-        if (message.content.split(" ")[0] == "!showall"){
+        if (message.content.split(" ")[0].toLowerCase() == "!showall"){
             if (message.member.roles.cache.has(ruolo)){
                 // comando scritto
                 var frase = " *'!showall'*.";
@@ -300,28 +304,24 @@ client.on("messageCreate", async (message) => {
                     } else {
                         times = res.length;
                     }
-
-                    function repeat(func, times) {
-                        func();
-                        times && --times && repeat(func, times);
-                    }
                     
                     repeat(function () { mess = mess + "\n**Tag**: " + res[times-1].id + 
                     "\n**Nome**: " + res[times-1].nome + ",\n**Tier**: " + res[times-1].tier + 
                     ",\n**Livello**: " + res[times-1].lvl + ",\n**Denaro**: " + res[times-1].mo + 
-                    ",\n**Milestones**: " + res[times-1].ms + ",\n**Ultima Sessione**: " + 
+                    " MO,\n**Milestones**: " + res[times-1].ms + ",\n**Ultima Sessione**: " + 
                     res[times-1].date.toDateString() + ".\n";
                     times = times-1 }, times);
 
                     message.channel.send(mess)
                 })
             } else {
-                message.reply(amm); // messaggio non sei admin
+                // messaggio non sei admin
+                message.reply(amm); 
             }
         }
 
         // scambio monete tra PG da parte del master
-        if (message.content.split(" ")[0] == "!trade"){
+        if (message.content.split(" ")[0].toLowerCase() == "!trade"){
             if (message.member.roles.cache.has(ruolo)){
                 // comando scritto
                 var frase = " *'!trade [Tag_Player_Mittente] [Tag_Player_Destinatario] [Denaro]'*."; 
@@ -339,7 +339,10 @@ client.on("messageCreate", async (message) => {
                     a = "e";
                 }
 
-                if (tag.length > 1 && tag2.length > 1 ) {
+                if (message.content.split(" ").length == 1) {
+                    // formula errata
+                    message.reply(att+frase); 
+                } else if (tag.length > 1 && tag2.length > 1 ) {
                     if (num == 0 || isNaN(num) == true){
                         
                         // errore valore
@@ -392,16 +395,18 @@ client.on("messageCreate", async (message) => {
                         })
                     }
                 } else {
-                    message.reply(att+frase); // formula errata
+                    // formula errata
+                    message.reply(att+frase); 
                 }
             } else {
-                message.reply(amm); // messaggio non sei admin
+                // messaggio non sei admin
+                message.reply(amm);
             }
         }
 
 
         // creare PG
-        if (message.content.split(" ")[0] == "!creapg"){
+        if (message.content.split(" ")[0].toLowerCase() == "!creapg"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
                
                 // comando scritto
@@ -420,7 +425,9 @@ client.on("messageCreate", async (message) => {
                     level = 1
                 }
                 
-                if (tag.length > 1 && name.length > 1) {
+                if (message.content.split(" ").length == 1) {
+                    message.reply(att+frase); // formula errata
+                } else if (tag.length > 1 && name.length > 1) {
                     if ((num <= 0 || isNaN(num) == true)||
                     (level < 1 /*|| isNaN(level) == true*/ || level > 20)){
                         
@@ -467,16 +474,18 @@ client.on("messageCreate", async (message) => {
                         + " e ha " + num + " monet" + a + " d'oro inizial" + b + "."); 
                     }
                 } else {
-                    message.reply(att+frase); // formula errata
+                    // formula errata
+                    message.reply(att+frase); 
                 }
             } else {
-                message.reply(amm2); // messaggio non sei nella land
+                // messaggio non sei nella land
+                message.reply(amm2); 
             }
         }
 
 
         // dai denaro
-        if (message.content.split(" ")[0] == "!dai"){
+        if (message.content.split(" ")[0].toLowerCase() == "!dai"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
                 // comando scritto
                 var frase = " *'!dai [Tag_Player_Beneficiario] [Denaro]'*."; 
@@ -486,7 +495,10 @@ client.on("messageCreate", async (message) => {
                 var tag = message.content.split(" ")[1];
                 var num = -Math.abs(Math.round(message.content.split(" ").slice(-1)[0] * 100) / 100);
 
-                if (tag.length > 1) {
+                if (message.content.split(" ").length == 1) {
+                    // formula errata
+                    message.reply(att+frase); 
+                } else if (tag.length > 1) {
                     if (num == 0 || isNaN(num) == true){
                         
                         // errore valore
@@ -534,41 +546,48 @@ client.on("messageCreate", async (message) => {
                         })
                     }
                 } else {
-                    message.reply(att+frase); // formula errata
+                    // formula errata
+                    message.reply(att+frase); 
                 }
             } else {
-                message.reply(amm2); // messaggio non sei nella land
+                // messaggio non sei nella land
+                message.reply(amm2); 
             }
         }
 
 
         // mostra info pg
-        if (message.content.split(" ")[0] == "!infopg"){
+        if (message.content.split(" ")[0].toLowerCase() == "!infopg"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
                 // comando scritto
                 var frase = " *'!infopg'*."; 
                 var tag = "<@"+message.author.id+">";
 
-                tab1.findOne({id: tag}, async function (err, res) {
-                    if (!res) {
-                        message.reply("Il personaggio di " + tag + " non esiste.");
-                    } else {
-                        message.reply("**INFO PERSONAGGIO**:\n\n" +
-                            "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
-                            ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl + 
-                            ",\n**Denaro**: " + res.mo + ",\n**Milestones**: " + res.ms + 
-                            ",\n**Ultima Sessione**: " + res.date.toDateString() + ".");
-                    }
-                })
-
+                if (message.content.split(" ").length > 1) {
+                    // formula errata
+                    message.reply(att+frase); 
+                } else {
+                    tab1.findOne({id: tag}, async function (err, res) {
+                        if (!res) {
+                            message.reply("Il personaggio di " + tag + " non esiste.");
+                        } else {
+                            message.reply("**INFO PERSONAGGIO**:\n\n" +
+                                "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
+                                ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl + 
+                                ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms + 
+                                ",\n**Ultima Sessione**: " + res.date.toDateString() + ".");
+                        }
+                    })
+                }
             } else {
-                message.reply(amm2); // messaggio non sei nella land
+                // messaggio non sei nella land
+                message.reply(amm2); 
             }
         }
 
 
         // Downtime
-        if (message.content.split(" ")[0] == "!downtime"){
+        if (message.content.split(" ")[0].toLowerCase() == "!downtime"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
                 // comando scritto
                 var frase = " *'!downtime [Tipo_di_Downtime] [Giorni]'*.\n"
@@ -577,7 +596,7 @@ client.on("messageCreate", async (message) => {
                 // dichiarazioni valori
                 var tag = "<@"+message.author.id+">";
                 var tipo = message.content.split(" ")[1];
-                var num = Math.abs(Math.round(message.content.split(" ")[2]));
+                var num = Math.abs(Math.round(message.content.split(" ").slice(-1)[0]));
                 giorno = new Date(oggi());
 
                 if (message.content.split(" ").length > 3) {
@@ -631,13 +650,225 @@ client.on("messageCreate", async (message) => {
                     }
                 }
             } else {
-                message.reply(amm2); // messaggio non sei nella land
+                // messaggio non sei nella land
+                message.reply(amm2); 
+            }
+        }
+
+        
+        // Spendi
+        if (message.content.split(" ")[0].toLowerCase() == "!spendi"){
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
+                
+                // comando scritto
+                var frase = " *'!spendi [Denaro]'*."; 
+                var tag = "<@"+message.author.id+">";
+                var num = -Math.abs(Math.round(message.content.split(" ").slice(-1)[0]*100) / 100);
+
+                if (message.content.split(" ").length == 1 || num == 0 || isNaN(num) == true){
+                    message.reply(att+frase)
+                } else {
+                    tab1.findOne({id: tag}, async function (err, res) {
+                        if (!res){
+                            message.reply("Non hai un personaggio all'interno della Land.")
+                        } else {
+                            if (num == 1 ) {
+                                a = "a"
+                            } else {
+                                a = "e"
+                            }
+                            if (res.mo >= num){
+                                //num = res.mo - num;
+                                await tab1.updateOne({id: tag}, {$inc: {mo: num}}, {upsert: true})
+                                message.reply("Hai speso " + Math.abs(num) + " monet" + a + " d'oro.")
+                            } else {
+                                message.reply("Non puoi indebitarti.")
+                            }
+                        }
+                    })
+                }
+            } else {
+                // messaggio non sei nella land
+                message.reply(amm2); 
             }
         }
 
 
         // Mercato 
-        if (message.content.split(" ")[0] == "!mercato"){
+        if (message.content.split(" ")[0].toLowerCase() == "!additem"){
+            if (message.member.roles.cache.has(ruolo)){
+                // comando scritto
+                var frase = " *'!additem [Nome_Oggetto] [Prezzo_MO] [Tipo] [Proprietà_Oggetto]'*.\n"+
+                "Per esempio: *!additem Spada Corta 10 Arma Accurata Leggera*.\n"+
+                "Cerca di non sbagliare il campo del prezzo."
+                var i = 1;
+                var mess = message.content.split(" ");
+                var idd = "";
+                var nome = "";
+                var tipo = "";
+                var denaro = "";
+                
+                if (mess.length == 1) {
+                    // messaggio di aiuto
+                    message.reply(att+frase)
+                } else {
+                    // trova indice prezzo
+                    while(isNaN(mess[i])){
+                        i = i + 1;
+                    }
+                    denaro = mess[i];
+                    if (denaro == 1){
+                        a = "a"
+                    } else {
+                        a = "e"
+                    }
+
+                    // compone nome
+                    if (i > 2) {
+                        // se nome composto da più parole
+                        for (let j = 1; j < i; j++){
+                            if (j == 1) {
+                                nome = nome + mess[j];
+                            } else {
+                                nome = nome + " " + mess[j];
+                            }
+                        }
+                    } else {
+                        //nome singolo
+                        nome = mess[1];
+                    }
+                    nome = nome.toUpperCase();
+
+                    // compone id parte 1
+                    idd = createid(mess[i+1]).toUpperCase();
+
+                    // compone tipo
+                    for (let j = (i + 1); j < mess.length; j++){
+                        if (j == (i + 1)) {
+                            tipo = tipo + mess[j];
+                        } else {
+                            tipo = tipo + " " + mess[j];
+                        }
+                    }
+                    tipo = tipo.toUpperCase();
+                    
+                    tab3.find({id: { $regex: '.*' + idd + '.*' }}, function(err, res){
+                        if (!res){
+                            idd = idd + "001"
+                        } else if (res.length > 1000) {
+                            message.reply("Il valore è andato oltre")
+                        } else {
+                            if (res.length+1 <= 9 ) {
+                                idd = idd + "00" + (res.length +1).toString()
+                            } else if (res.length+1 <= 99 ) {
+                                idd = idd + "0" + (res.length +1).toString()
+                            } else if (res.length+1 <= 999 ) {
+                                idd = idd + (res.length +1).toString()
+                            }
+                            idd.toUpperCase();
+                            const ogg = new tab3({id: idd, name: nome, type: tipo, mo: denaro})
+                            ogg.save()
+                            message.reply("L'oggetto '"+ nome +"' del tipo '"+ tipo.split(" ")[0] +"' che "+
+                            "costa " + denaro + " monet" + a + " d'oro, è stato inserito con successo.")
+                        }
+                    })
+                }
+            } else {
+                // messaggio non sei admin
+                message.reply(amm); 
+            }
+
+        }
+
+        // Compra
+        if (message.content.split(" ")[0].toLowerCase() == "!compra"){
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
+                // comando scritto
+                var frase = " *'!compra [Nome_Oggetto] [Quantità].*\n"+
+                "Se hai bisogno di leggere gli oggetti, utilizza il comando !mercato.";
+                var mess = message.content.split(" ");
+                var nome = "";
+                var tag = "<@" + message.author.id + ">";
+                var count = mess.slice(-1)[0];
+                var monete = 0;
+
+                if (mess.length == 1) {
+                    // messaggio di aiuto
+                    message.reply(att+frase)
+                } else {
+                    if (isNaN(count)==true){
+                        count = 1;
+                    }
+                    console.log(count)
+                    tab1.findOne({id: tag}, async function(err, res) {
+                        if (!res) {
+                            // esistenza personaggio autore
+                            message.reply("Il personaggio di "+ tag + " non esiste.")
+                        } else {
+                            monete = res.mo;
+                            if (mess.length == 1) {
+                                // messaggio di aiuto
+                                message.reply(att+frase)
+                            } else {
+                                // generazione nome
+                                for (let j = 1; j < (mess.length-1); j++){
+                                    if (j == 1) {
+                                        nome = nome + mess[j];
+                                    } else {
+                                        nome = nome + " " + mess[j];
+                                    }
+                                }
+                                nome = nome.toUpperCase();
+                                
+                                // cerco nome nella tabella mercato
+                                await tab3.findOne({name: nome}, async function(err, res){
+                                    if (!res){
+                                        message.reply("Controlla se hai scritto bene il messaggio.\n"+
+                                        "Altrimenti è possibile che l'oggetto cercato non sia ancora "+
+                                        "disponibile nel mercato.")
+                                    } else {
+                                        monete = monete - (res.mo*count)
+                                        if (res.mo == 1) {
+                                            a = "a"
+                                        } else {
+                                            a = "e"
+                                        }
+                                        if ((monete+(res.mo*count)) == 1) {
+                                            b = "a"
+                                        } else {
+                                            b = "e"
+                                        }
+                                        if (count == 1) {
+                                            c = "L'"
+                                            d = "o"
+                                            e = ""
+                                        } else {
+                                            c = "Gli "
+                                            d = "i"
+                                            e = "no"
+                                        }
+                                        if (monete >= 0) {
+                                            await tab1.updateOne({id: tag}, {$set: {mo: monete}})
+                                            message.reply("Il personaggio di " + tag + " ha comprato "+
+                                            c.toLowerCase()+"oggett"+ d +" chiamat" + d + " come '" +
+                                            nome +"'.")
+                                        } else {
+                                            message.reply("Non puoi indebitarti.\n+"+ c + "oggett"+d+" '" +
+                                            res.name + "' costa"+e+" "+(res.mo*count)+" monet"+a+" d'oro.\n" +
+                                            "Il personaggio di "+ tag +" ha "+(monete+res.mo)+
+                                            " monet"+b+" d'oro.")
+                                        }
+                                    }
+                                }).clone()
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        
+        // Mercato 
+        if (message.content.split(" ")[0].toLowerCase() == "!mercato"){
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)){
                 // comando scritto
                 var frase = " *'!mercato [Tipo_Oggetto]'*.\n"+
@@ -653,39 +884,48 @@ client.on("messageCreate", async (message) => {
                 "'Finimenti' e anche 'Sella'.\n"+
                 "'Veicoli' e anche 'Imbarcazioni', 'Volanti'.\n"+
                 "'Merci' e anche 'Alimenti', 'Materiali'."
-
-                //appunta tutti i tipi e proprietà 
-                //usa il match per capire se stanno dentro le proprietà
-                //stila una lista di oggetti in funzione delle proprietà
-                //poi fai compra e vendi come comandi
-                //dove scrivono comando più oggetto
-                //che per trovarlo basterà sempre usare il find + match(?)
-                //aggiungici pure la cosa che se lo hanno acquistato il 
-                //prezzo aumenta al doppio del numero negativo
-                //-1 => +2% => 1.02
-                //prezzo diminuisce al pari del numero positivo
-                //1 => -1% => 0.99
-                //Nel caso cambiamo la proporzione
-                //O eventualmente aggiungiamo una scadenza entro la quale 
-                //viene rifornito il mercato o vengono rivendute le cose in eccesso
-                //Comando vendita invece si ottiene la metà del valore dell'oggetto
-                //maggiorato o diminuito in base al mercato in quel momento e dopo
-                //la cosa aggiunta/tolta, il mercato varia il numeretto sull'oggetto
-
+                
                 // dichiarazioni valori
-                sp = message.content.split(" ").length.toString();
-                mess = message.content.replace("!mercato", "").replace(/\s+/g, '').toLowerCase();
-                if (sp == 1)
+                var mex = message.content.split(" ");
+                var mess = message.content.replace("!mercato ".toLowerCase(), "").toUpperCase();
+                var mep = "**LISTA DI OGGETTI '"+ mess + "'**\n"
+                var times;
+
+
+                //
+                //
+                // RICORDATI DI GUARDARE COME 
+                // AGGIUSTARE QUI SU QUESTA COSA
+                // CHE NON PUOI SCRIVERE DUE PAROLE
+                // DISTANTI TRA LORO O CON QUALCOSA IN MEZZO
+                //
+                //
+
+                if (mex.length == 1){
                     message.reply(att+frase)
+                } else {
+                    tab3.find({type: { $regex: '.*' + mess + '.*'}}).exec(function (err, res){
+                        if (!res){
+                            message.channel.send("Qualcosa è andato storto.");
+                        } else {
+                            times = res.length;
+                        }
+                        
+                        repeat(function () { mep = mep + res[times-1].name + ", " + res[times-1].mo + " MO.\n";
+                        times = times-1 }, times);
+    
+                        message.channel.send(mep)
+                    })
+                }
 
             } else {
-                message.reply(amm2); // messaggio non sei nella land
+                // messaggio non sei nella land
+                message.reply(amm2); 
             }
         }
 
-
         // help differenziato per ruolo admin e utente
-        if (message.content.split(" ")[0] == "!help") {
+        if (message.content.split(" ")[0].toLowerCase() == "!help") {
 
             // help admin
             if (message.member.roles.cache.has(ruolo)) {
@@ -719,7 +959,10 @@ client.on("messageCreate", async (message) => {
                 "*Il comando è '!downtime [Tipo_di_Downtime] [Giorni]'*.\n"
                 +"Usa un'unica parola per il tipo di Downtime.\n"
                 +"Scrivendo solo '!downtime' puoi riscattare e/o controllare il DT concluso o attivo.\n"
-                +"Ti permette di avviare un downtime di un tipo qualsiasi per la durata prestabilita (in giorni).\n"
+                +"Ti permette di avviare un downtime di un tipo qualsiasi per la durata prestabilita (in giorni).\n"+
+                +"**!spendi**\n"+
+                "*Il comando è '!spendi [Denaro]'*.\n"
+                +"e permette di spendere il denaro senza usare per forza il mercato.\n"
                 );
             }
         }
@@ -859,4 +1102,58 @@ function oggi() {
     var today = new Date();
     var data = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     return data;
+}
+
+function createid(x) {
+    x = x.toLowerCase();
+    y = "";
+    w = "";
+    z = "";
+
+    for (let i = 0; i < x.split("").length; i++) {
+        // se non vocale
+        if (x.split("")[i] != "a"&&
+        x.split("")[i] != "e"&&
+        x.split("")[i] != "i"&&
+        x.split("")[i] != "o"&&
+        x.split("")[i] != "u"&&
+        x.split("")[i] != "à"&&
+        x.split("")[i] != "è"&&
+        x.split("")[i] != "é"&&
+        x.split("")[i] != "ì"&&
+        x.split("")[i] != "ò"&&
+        x.split("")[i] != "ù") {
+            y = y + x.split("")[i]
+        } else {
+            w = w + x.split("")[i]
+        }
+    }
+
+    i = 0;
+
+    do {
+        while (i != y.length && z.length != 3){
+            if (y.split("")[i] != z.split("").slice(-1)[0]){
+                z = z + y.split("")[i]
+            }
+            i = i + 1 
+        }
+        i = 0;
+        while (i != w.length && z.length != 3) {
+            if (w.split("")[i] != z.split("").slice(-1)[0]){
+                z = z + w.split("")[i]
+            }
+            i = i + 1
+        } 
+        while (z.length != 3) {
+            z = z + "X"
+        }
+    }
+    while (z.length != 3);
+    return z.toUpperCase()
+}
+
+function repeat(func, times) {
+    func();
+    times && --times && repeat(func, times);
 }
