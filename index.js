@@ -1,11 +1,10 @@
+require("dotenv").config();
 const Discord = require("discord.js")
-const { MongoParseError } = require("mongodb")
-//const { MongoClient } = require("mongodb")
-//const MongoClient = require("mongodb").MongoClient
-const mongoose = require('mongoose')
 const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]}
 )
+
+const mongoose = require('mongoose')
 
 var symb = "!"
 var mess_err = "Qualcosa è andato storto."
@@ -16,23 +15,24 @@ var att = "**Attenzione!**\n"
 var utente = "965706832758841364" //id ruolo utente land
 var ruolo = "965547318009016330" //id ruolo admin
 var canale = "965263672421277748" //id canale dove scrive il bot
+var canaleBenv = "965263672421277748" //id canale di benvenuto
+var categoria = "965263672421277747" //id categoria dove stanno i canali
 var server = "965263672421277746" //id server
-var pass = "cCgYya6YDwnGDH9h" //pass database
 
-//client.login(process.env.token)
-client.login("OTY1MjYyOTEwNTc2Mjk1OTM2.YlwpIw.3g4joeLLpp_ykDY08MXmBspROkU")
 
-//var MongoClient = require("mongodb").MongoClient;
-//var database;
-var url = "mongodb+srv://botperdnd:"+pass+"@cluster0.kfhj7.mongodb.net/DnDBot?retryWrites=true&w=majority";
+client.login(process.env.TOKEN)
+
+var url = "mongodb+srv://botperdnd:"+process.env.PSW+"@cluster0.kfhj7.mongodb.net/DnDBot?retryWrites=true&w=majority";
 mongoose.connect(url);
 
 client.on("ready", () => {
     console.log("ONLINE");
+    canali()
 })
 
-// crea collection
-
+/////////////////////
+// crea collection //
+/////////////////////
 // riassunto pg
 const tab1 = mongoose.model('Tab1',{
     id: String,
@@ -68,6 +68,14 @@ const tab4 = mongoose.model('Tab4',{
     num: Number
 })
 
+// canali
+const tab5 = mongoose.model('Tab5',{
+    id_pl: String,
+    name_pl: String,
+    id_chan: String,
+    type: String
+})
+
 
 //
 //
@@ -89,10 +97,32 @@ const tab4 = mongoose.model('Tab4',{
 //
 //
 
-client.on("messageCreate", async (message) => {
-    if(message.author.bot == false && message.channel == canale) {
+//var x = ["965263672421277748", "971798572347564043", "972848612604264498"]
+//x.includes(message.channel.id)
 
-        //Dare MS ai giocatori  
+client.on("messageCreate", async (message) => {
+    if(message.author.bot == false /*&& message.channel == canale*/) {
+
+        
+        // test
+        if (message.content.split(" ")[0].toLowerCase() == "a"){
+            if (message.channel.parentId == categoria) {
+                console.log("a")
+            } else {
+                console.log("b")
+                canale.threads
+                .create({
+                    name: 'food-talk',
+                    autoArchiveDuration: 60,
+                    reason: 'Needed a separate thread for food',
+                })
+                .then(threadChannel => console.log(threadChannel))
+                .catch(console.error);
+            }
+        }
+        
+
+        //Dare MS ai giocatori
         c_givems = symb + "givems";
         f_givems = "*'"+c_givems+" [Tag_Player] [Milestones]'*";
         if (message.content.split(" ")[0].toLowerCase() == c_givems){
@@ -1897,10 +1927,11 @@ client.on("messageCreate", async (message) => {
 })
 
 
+
 // Nuovo utente land
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-    let txtChannel = client.channels.cache.get(canale); //my own text channel, you may want to specify your own
+    let txtChannel = client.channels.cache.get(canaleBenv); //my own text channel, you may want to specify your own
     let oldRoleIDs = [];
     oldMember.roles.cache.each(role => {
         //console.log(role.name, role.id);
@@ -2072,4 +2103,18 @@ function listaogg(x){
         y = y + x[i] + '.*'
     }
     return y
+}
+
+function canali(){
+    var can;
+    tab5.find().exec(function (err,res){
+        if (!res) {
+            console.log("Non c'è nulla.")
+        } else {
+            for(let i = 0; i < res.length; i++){
+                can[i] = res[i]
+            }
+        }
+    })
+    return can
 }

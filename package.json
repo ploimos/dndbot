@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/rest": "^0.5.0-dev.1651493333-4ba0f56",
+    "discord-api-types": "^0.32.1",
     "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
     "mongodb": "^4.5.0",
     "mongoose": "^6.3.1"
   },
