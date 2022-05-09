@@ -19,6 +19,8 @@ let canale = "965263672421277748" //id canale dove scrive il bot
 let canaleBenv = "965263672421277748" //id canale di benvenuto
 let categoria = "965263672421277747" //id categoria dove stanno i canali
 let server = "965263672421277746" //id server
+const mainChan = [canale, canaledt, canalemarket];
+let listaCanali;
 
 
 client.login(process.env.TOKEN)
@@ -28,7 +30,7 @@ mongoose.connect(url);
 
 client.on("ready", () => {
     console.log("ONLINE");
-    canali()
+    listaCanali = canali();
 })
 
 /////////////////////
@@ -99,62 +101,18 @@ const tab5 = mongoose.model('Tab5', {
 //
 
 
-//
-//
-// Secondo me devi inserire {} all'interno del .then()
-// e poi dentro una funzione di qualsiasi tipo per svolgere quello che ti serve
-// Da là dentro aggiorni il database e scrivi pure all'interno del thread
-// Vedi se funzia, altrimenti F
-//
-//
-
-
 //let x = ["965263672421277748", "971798572347564043", "972848612604264498"]
 //x.includes(message.channel.id)
 
 client.on("messageCreate", async (message) => {
-    if (!message.author.bot /*&& message.channel == canale*/) {
+    if (!message.author.bot && ((mainChan).includes(message.channel.id) == true || (listaCanali).includes(message.channel.id) == true)) {
 
-        //client.channels.cache.get(canaleBenv)
-        const channela = message.guild.channels.cache.get(canalemarket)
-        const channelb = message.guild.channels.cache.get(canaledt)
-        let idA;
-        let idB;
-        let Text;
-        let dario = "Marco"
-        tag = "<@"+message.author.id+">"
-        // test
-        if (message.content.split(" ")[0].toLowerCase() == "a") {
-            if (message.channel.parentId == categoria) {
-                const channela = message.guild.channels.cache.get(canalemarket)
-                console.log("a")
-                channela.threads
-                    .create({
-                        name: 'Mercato ' + dario,
-                        autoArchiveDuration: 10080,
-                        description: 'Mercato per belli',
-                    })
-                    .then(threadChannel)
-                    .catch(console.error);
-                console.log(id)
-                /*Text = message.guild.channels.cache.get(idA)
-                Text.send("<@" + tag + ">\nQuesto sarà il posto dove potrai inserire i tuoi commerci.");
-                console.log("b")
-                channelb.threads
-                    .create({
-                        name: 'Downtime ' + dario,
-                        autoArchiveDuration: 10080,
-                        description: 'Downtime per belli',
-                    })
-                    .then(threadChannel => idB = threadChannel.id)
-                    .catch(console.error);
-                Text = message.guild.channels.cache.get(idB)
-                Text.send("<@" + tag + ">\nQuesto sarà il posto dove potrai inserire i tuoi Downtime.");*/
-            } else {
-                console.log("b")
-            }
-        }
-
+        /*
+        if (message.content.split(" ")[0].toLowerCase() == "b") {
+            console.log(listaCanali);
+            message.reply("Bella")
+            console.log()
+        }*/
 
 
         //Dare MS ai giocatori
@@ -208,14 +166,14 @@ client.on("messageCreate", async (message) => {
                                         // frase modificata se numero pari a 1 o meno
                                         // o se la ms viene tolta o aggiunta
                                         if (msv > 1 || msv < -1 || msv == 0) {
-                                            let s = "s"
+                                            s = "s"
                                         } else if (msv > 0 || msv < 0) {
-                                            let s = ""
+                                            s = ""
                                         }
                                         if (msv > 0) {
-                                            let a = "aggiunto"
+                                            a = "aggiunto"
                                         } else if (msv <= 0) {
-                                            let a = "tolto"
+                                            a = "tolto"
                                         }
 
                                         // risposta messaggio
@@ -320,14 +278,14 @@ client.on("messageCreate", async (message) => {
                             // frase modificata se numero pari a 1 o meno
                             // o se viene tolto o aggiunto del denaro 
                             if (num > 1 || num < -1) {
-                                let s = "e"
+                                s = "e"
                             } else if (num > 0 || num < 0) {
-                                let s = "a"
+                                s = "a"
                             }
                             if (num > 0) {
-                                let a = "aggiunto"
+                                a = "aggiunto"
                             } else if (num < 0) {
-                                let a = "tolto"
+                                a = "tolto"
                             }
 
                             tab1.findOne({ id: tag }, async function (err, res) {
@@ -500,28 +458,33 @@ client.on("messageCreate", async (message) => {
                 try {
                     // comando scritto
                     let frase = laf + f_showall + ".";
+                    mex = message.content.split(" ");
                     mess = "**LISTA DEI PERSONAGGI**:\n";
-                    tab1.find().sort({ date: "desc", ms: "desc", nome: "asc" }).exec(function (err, res) {
+                    if (mex.length > 1){
+                        message.reply(att+frase);
+                    } else {
+                        tab1.find().sort({ date: "desc", ms: "desc", nome: "asc" }).exec(function (err, res) {
 
-                        if (!res) {
-                            message.channel.send("Qualcosa è andato storto.");
-                        } else {
-                            // dichiaro massimo
-                            times = res.length;
+                            if (!res) {
+                                message.channel.send("Qualcosa è andato storto.");
+                            } else {
+                                // dichiaro massimo
+                                times = res.length;
 
-                            // decrescente
-                            repeat(function () {
-                                mess = mess + "\n**Tag**: " + res[times - 1].id +
-                                    "\n**Nome**: " + res[times - 1].nome + ",\n**Tier**: " + res[times - 1].tier +
-                                    ",\n**Livello**: " + res[times - 1].lvl + ",\n**Denaro**: " + res[times - 1].mo +
-                                    " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Ultima Sessione**: " +
-                                    res[times - 1].date.toDateString() + ".\n";
-                                times = times - 1
-                            }, times);
+                                // decrescente
+                                repeat(function () {
+                                    mess = mess + "\n**Tag**: " + res[times - 1].id +
+                                        "\n**Nome**: " + res[times - 1].nome + ",\n**Tier**: " + res[times - 1].tier +
+                                        ",\n**Livello**: " + res[times - 1].lvl + ",\n**Denaro**: " + res[times - 1].mo +
+                                        " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Ultima Sessione**: " +
+                                        res[times - 1].date.toDateString() + ".\n";
+                                    times = times - 1
+                                }, times);
 
-                            message.channel.send(mess)
-                        }
-                    })
+                                message.channel.send(mess)
+                            }
+                        })
+                    }
                 } catch (err) {
                     message.reply(mess_err);
                 }
@@ -649,6 +612,24 @@ client.on("messageCreate", async (message) => {
                                 await tab1.deleteOne({ id: tag })
                                 await tab2.deleteOne({ id: tag })
                                 await tab4.deleteMany({ id_pl: tag })
+
+                                // controlla se ci sono thread vecchi del PG
+                                tab5.find({ id_pl: tag }, async function (err, res) {
+                                    if (res == null) {
+                                        console.log("Non ci sono.")
+                                    } else {
+                                        for(let i = 0; i < res.length; i++){
+                                            Text = message.guild.channels.cache.get(res[i].id_chan)
+                                            await Text.delete('cleaning out old threads')
+                                                .then(deletedThread => console.log("Ho cancellato il thread " + deletedThread.id))
+                                                .catch(console.error);
+                                        }
+                                        await tab5.deleteMany({ id_pl: tag })
+                                    }
+                                })
+
+                                // aggiornamento variabile
+                                listaCanali = canali()
                             }
                         })
                     }
@@ -676,6 +657,11 @@ client.on("messageCreate", async (message) => {
                     let name = message.content.replace(/\s\s+/g, ' ').split(" ")[2];
                     let num = Math.round(message.content.replace(/\s\s+/g, ' ').split(" ")[3] * 100) / 100;
                     let level = message.content.split(" ").slice(-1)[0];
+                    const channela = message.guild.channels.cache.get(canalemarket);
+                    const channelb = message.guild.channels.cache.get(canaledt);
+                    let idA;
+                    let idB;
+                    let Text;
 
                     // se il valore non è inserito, il pg è livello 1
                     // se vuoi togliere sta cosa, basta togliere commento
@@ -706,34 +692,81 @@ client.on("messageCreate", async (message) => {
                                 }
                             })
 
+                            // controlla se ci sono thread vecchi del PG
+                            tab5.find({ id_pl: tag }, async function (err, res) {
+                                if (res == null) {
+                                    console.log("Nuovo PG")
+                                } else {
+                                    for(let i = 0; i < res.length; i++){
+                                        Text = message.guild.channels.cache.get(res[i].id_chan)
+                                        await Text.delete()
+                                            .then(deletedThread => console.log("Ho cancellato il thread " + deletedThread.id))
+                                            .catch(console.error);
+                                    }
+                                    await tab5.deleteMany({ id_pl: tag })
+                                }
+                            })
+
+                            // crea thread mercato
+                            await channela.threads
+                                .create({
+                                    name: 'Mercato ' + name,
+                                    autoArchiveDuration: 10080
+                                })
+                                .then(res => idA = res.id)
+                                .catch(console.error);
+                            Text = message.guild.channels.cache.get(idA)
+                            await Text.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato" +
+                                "ad ogni tuo acquisto all'interno della Land.");
+                            const g = new tab5({ id_pl: tag, name_pl: name, id_chan: idA, type: "Mercato" })
+                            g.save()
+
+                            // crea thread dt
+                            await channelb.threads
+                                .create({
+                                    name: 'Downtime ' + name,
+                                    autoArchiveDuration: 10080
+                                })
+                                .then(res => idB = res.id)
+                                .catch(console.error);
+                            TextB = message.guild.channels.cache.get(idB)
+                            await TextB.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato" +
+                                "ad ogni tuo downtime all'interno della Land.");
+                            const f = new tab5({ id_pl: tag, name_pl: name, id_chan: idB, type: "Downtime" })
+                            f.save()
+                            
+                            // aggiornamento variabile
+                            listaCanali = canali()
+
+
                             // valore delle milestones
-                            let num = 0;
-                            num = milestones(level);
+                            let numb = 0;
+                            numb = milestones(level);
                             tie = ttier(level);
                             let today = new Date();
                             let data = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
                             // plurale o singolare
-                            await tab1.findOneAndUpdate({ id: tag }, { id: tag, nome: name, mo: num, ms: num, lvl: level, tier: tie, date: data }, { upsert: true })
+                            await tab1.findOneAndUpdate({ id: tag }, { id: tag, nome: name, mo: num, ms: numb, lvl: level, tier: tie, date: data }, { upsert: true })
                             await tab2.findOneAndDelete({ id: tag })
                             await tab4.deleteMany({ id_pl: tag })
 
                             if (num == 1) {
-                                let a = "a"
-                                let b = "e"
+                                a = "a"
+                                b = "e"
                             } else {
-                                let a = "e"
-                                let b = "i"
+                                a = "e"
+                                b = "i"
                             }
                             if (num == 1) {
-                                let s = ""
+                                s = ""
                             } else {
-                                let s = "s"
+                                s = "s"
                             }
 
                             // risposta
                             message.reply("Il personaggio di " + tag + " si chiama '" + name
-                                + "', è di " + level + "° livello con " + num + " milestone" + s
+                                + "', è di " + level + "° livello con " + numb + " milestone" + s
                                 + " e ha " + num + " monet" + a + " d'oro inizial" + b + ".");
                         }
                     } else {
@@ -784,9 +817,9 @@ client.on("messageCreate", async (message) => {
 
                                 // singolare o plurale
                                 if (Math.abs(num) == 1) {
-                                    let a = "a"
+                                    a = "a"
                                 } else {
-                                    let a = "e"
+                                    a = "e"
                                 }
 
                                 if (!res) {
@@ -1310,21 +1343,24 @@ client.on("messageCreate", async (message) => {
                     let mess = message.content.replace(/\s\s+/g, ' ').split(" ");
                     let tag = "<@" + message.author.id + ">";
 
-
-                    tab1.findOne({ id: tag }, async function (err, res) {
-                        if (!res) {
-                            message.reply("Il personaggio di " + tag + " non esiste.")
-                        } else {
-                            tab2.findOne({ id: tag }, async function (err, res) {
-                                if (!res) {
-                                    message.reply("Il personaggio di " + tag + " non ha un downtime attivo.")
-                                } else {
-                                    await tab2.deleteOne({ id: tag })
-                                    message.reply("Il downtime del personaggio di " + tag + " è stato cancellato.")
-                                }
-                            })
-                        }
-                    })
+                    if (mess.length > 1) {
+                        message.reply(att+frase)
+                    } else {
+                        tab1.findOne({ id: tag }, async function (err, res) {
+                            if (!res) {
+                                message.reply("Il personaggio di " + tag + " non esiste.")
+                            } else {
+                                tab2.findOne({ id: tag }, async function (err, res) {
+                                    if (!res) {
+                                        message.reply("Il personaggio di " + tag + " non ha un downtime attivo.")
+                                    } else {
+                                        await tab2.deleteOne({ id: tag })
+                                        message.reply("Il downtime del personaggio di " + tag + " è stato cancellato.")
+                                    }
+                                })
+                            }
+                        })
+                    }
                 } catch (err) {
                     message.reply(mess_err);
                 }
@@ -2141,24 +2177,16 @@ function repeat(func, times) {
     times && --times && repeat(func, times);
 }
 
-function listaogg(x) {
-    y = '.*' + x[0] + '.*'
-    for (let i = 1; i < x + 1; i++) {
-        y = y + x[i] + '.*'
-    }
-    return y
-}
-
 function canali() {
-    let can;
+    const can = [];
     tab5.find().exec(function (err, res) {
         if (!res) {
             console.log("Non c'è nulla.")
         } else {
             for (let i = 0; i < res.length; i++) {
-                can[i] = res[i]
+                can[i] = res[i].id_chan;
             }
         }
     })
-    return can
+    return can;
 }
