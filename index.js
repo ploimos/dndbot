@@ -107,11 +107,15 @@ const tab5 = mongoose.model('Tab5', {
 client.on("messageCreate", async (message) => {
     if (!message.author.bot && ((mainChan).includes(message.channel.id) == true || (listaCanali).includes(message.channel.id) == true)) {
 
-        /*
-        if (message.content.split(" ")[0].toLowerCase() == "b") {
-            console.log(listaCanali);
-            message.reply("Bella")
-            console.log()
+
+        /*if (message.content.split(" ")[0].toLowerCase() == "b") {
+
+            const embed = new Discord.MessageEmbed()
+                .setTitle('some title')
+                .setDescription('some description')
+                .setImage('image url')
+            message.reply({embeds: [embed]})
+
         }*/
 
 
@@ -460,8 +464,8 @@ client.on("messageCreate", async (message) => {
                     let frase = laf + f_showall + ".";
                     mex = message.content.split(" ");
                     mess = "**LISTA DEI PERSONAGGI**:\n";
-                    if (mex.length > 1){
-                        message.reply(att+frase);
+                    if (mex.length > 1) {
+                        message.reply(att + frase);
                     } else {
                         tab1.find().sort({ date: "desc", ms: "desc", nome: "asc" }).exec(function (err, res) {
 
@@ -618,7 +622,7 @@ client.on("messageCreate", async (message) => {
                                     if (res == null) {
                                         console.log("Non ci sono.")
                                     } else {
-                                        for(let i = 0; i < res.length; i++){
+                                        for (let i = 0; i < res.length; i++) {
                                             Text = message.guild.channels.cache.get(res[i].id_chan)
                                             await Text.delete('cleaning out old threads')
                                                 .then(deletedThread => console.log("Ho cancellato il thread " + deletedThread.id))
@@ -697,7 +701,7 @@ client.on("messageCreate", async (message) => {
                                 if (res == null) {
                                     console.log("Nuovo PG")
                                 } else {
-                                    for(let i = 0; i < res.length; i++){
+                                    for (let i = 0; i < res.length; i++) {
                                         Text = message.guild.channels.cache.get(res[i].id_chan)
                                         await Text.delete()
                                             .then(deletedThread => console.log("Ho cancellato il thread " + deletedThread.id))
@@ -734,7 +738,7 @@ client.on("messageCreate", async (message) => {
                                 "ad ogni tuo downtime all'interno della Land.");
                             const f = new tab5({ id_pl: tag, name_pl: name, id_chan: idB, type: "Downtime" })
                             f.save()
-                            
+
                             // aggiornamento variabile
                             listaCanali = canali()
 
@@ -1344,7 +1348,7 @@ client.on("messageCreate", async (message) => {
                     let tag = "<@" + message.author.id + ">";
 
                     if (mess.length > 1) {
-                        message.reply(att+frase)
+                        message.reply(att + frase)
                     } else {
                         tab1.findOne({ id: tag }, async function (err, res) {
                             if (!res) {
