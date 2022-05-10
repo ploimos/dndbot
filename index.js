@@ -79,31 +79,6 @@ const tab5 = mongoose.model('Tab5', {
     type: String
 })
 
-
-//
-//
-//--->>>Devi terminare i comandi (l'ultimo forse è il com14 che dovresti aver fatto) ---FATTO
-//--->>>E poi devi integrare i comandi all'help ---FATTO
-//--->>>Ultimo consiglio è quello di inserire i try{}catch(e){} per ogni roba ---FATTO
-//--->>>Dovresti aver fatto tutto e poi controllare il 6) ---FATTO
-//--->>>Comoda sta cosa di scrivere per il te del futuro che non ricorda un cazzo :rofl:
-//
-// ---1) comando deletepg
-// ---se sovrascrivi pg, cancellare inventario e downtime FATTO
-// ---2) stop downtime come comando FATTO
-// ---3) spendi aggiustare non può indebitarsi! FATTO
-// ---4) comando butta oggetti FATTO
-// ---5) regala/dai oggetto FATTO
-// ---6) poter scrivere nei thread FATTO
-// ---7) spostare creapg in admin FATTO
-// ---8) setms PENSIAMOCI!! FATTO
-//
-//
-
-
-//let x = ["965263672421277748", "971798572347564043", "972848612604264498"]
-//x.includes(message.channel.id)
-
 client.on("messageCreate", async (message) => {
     if (!message.author.bot && ((mainChan).includes(message.channel.id) == true || (listaCanali).includes(message.channel.id) == true)) {
 
