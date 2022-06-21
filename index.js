@@ -695,7 +695,7 @@ client.on("messageCreate", async (message) => {
                                 .then(res => idA = res.id)
                                 .catch(console.error);
                             Text = message.guild.channels.cache.get(idA)
-                            await Text.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato" +
+                            await Text.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato " +
                                 "ad ogni tuo acquisto all'interno della Land.");
                             const g = new tab5({ id_pl: tag, name_pl: name, id_chan: idA, type: "Mercato" })
                             g.save()
@@ -709,7 +709,7 @@ client.on("messageCreate", async (message) => {
                                 .then(res => idB = res.id)
                                 .catch(console.error);
                             TextB = message.guild.channels.cache.get(idB)
-                            await TextB.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato" +
+                            await TextB.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato " +
                                 "ad ogni tuo downtime all'interno della Land.");
                             const f = new tab5({ id_pl: tag, name_pl: name, id_chan: idB, type: "Downtime" })
                             f.save()
