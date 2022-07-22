@@ -71,7 +71,7 @@ const tab4 = mongoose.model('Tab4', {
     num: Number
 })
 
-// canali
+// canali DT, Mercato riferiti al personaggio
 const tab5 = mongoose.model('Tab5', {
     id_pl: String,
     name_pl: String,
@@ -409,12 +409,11 @@ client.on("messageCreate", async (message) => {
                             if (!res) {
                                 message.reply("Il personaggio di " + tag + " non esiste.");
                             } else {
-                                aa = res.date.toDateString();
                                 message.reply("**INFO PERSONAGGIO**:\n\n" +
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
-                                    ",\n**Ultima Sessione**: " + trad(aa) + ".");
+                                    ",\n**Ultima Sessione**: " + trad(res.date.toDateString()) + ".");
                             }
                         })
                     } else {
@@ -863,7 +862,7 @@ client.on("messageCreate", async (message) => {
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
-                                    ",\n**Ultima Sessione**: " + res.date.toDateString() + ".");
+                                    ",\n**Ultima Sessione**: " + trad(res.date.toDateString()) + ".");
                             }
                         })
                     }
@@ -937,7 +936,7 @@ client.on("messageCreate", async (message) => {
                                                 if (giorno < res.date) {
                                                     message.reply("Il personaggio di " + tag + " non può avviare un secondo downtime " +
                                                         "senza aver terminato quello in corso.\nIl downtime attuale termina il giorno: "
-                                                        + res.date.toDateString() + ".")
+                                                        + trad(res.date.toDateString()) + ".")
                                                 } else {
                                                     message.reply("Devi prima riscuotere il downtime che hai concluso.\n||Scrivi '" + c_downtime + "' " +
                                                         "così puoi riscattare il downtime concluso.||")
@@ -2172,9 +2171,8 @@ function canali() {
 }
 
 function trad(x) {
-    console.log(x)
+    //giorni settimana
     a = x.split(" ")[0]
-    console.log(a)
     if (a == "Mon"){
         a = "Lunedì"
     } else if (a == "Tue"){
@@ -2190,7 +2188,8 @@ function trad(x) {
     } else if (a == "Sun"){
         a = "Domenica"
     }
-    console.log(a)
+
+    //mesi
     b = x.split(" ")[1]
     if (b == "Jan"){
         b = "Gennaio"
@@ -2217,11 +2216,35 @@ function trad(x) {
     } else if (b == "Dec"){
         b = "Dicembre"
     }
-    console.log(b)
+
+    //numero giorni con 0 davanti
     c = x.split(" ")[2]
+    if (c == "01"){
+        c = "1"
+    } else if (c == "02"){
+        c = "2"
+    } else if (c == "03"){
+        c = "3"
+    } else if (c == "04"){
+        c = "4"
+    } else if (c == "05"){
+        c = "5"
+    } else if (c == "06"){
+        c = "6"
+    } else if (c == "07"){
+        c = "7"
+    } else if (c == "08"){
+        c = "8"
+    } else if (c == "09"){
+        c = "9"
+    } 
+
+    //anno
     d = x.split(" ")[3]
 
+    //composizione completa 
     y = a + " " + c + " " + b + " " + d
-    console.log(y)
+    
+    //restituzione valore
     return y
 }
