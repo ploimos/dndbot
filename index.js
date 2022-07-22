@@ -409,11 +409,12 @@ client.on("messageCreate", async (message) => {
                             if (!res) {
                                 message.reply("Il personaggio di " + tag + " non esiste.");
                             } else {
+                                aa = res.date.toDateString();
                                 message.reply("**INFO PERSONAGGIO**:\n\n" +
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
-                                    ",\n**Ultima Sessione**: " + res.date.toDateString() + ".");
+                                    ",\n**Ultima Sessione**: " + trad(aa) + ".");
                             }
                         })
                     } else {
@@ -456,7 +457,7 @@ client.on("messageCreate", async (message) => {
                                         "\n**Nome**: " + res[times - 1].nome + ",\n**Tier**: " + res[times - 1].tier +
                                         ",\n**Livello**: " + res[times - 1].lvl + ",\n**Denaro**: " + res[times - 1].mo +
                                         " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Ultima Sessione**: " +
-                                        res[times - 1].date.toDateString() + ".\n";
+                                        trad(res[times - 1].date.toDateString()) + ".\n";
                                     times = times - 1
                                 }, times);
 
@@ -2168,4 +2169,59 @@ function canali() {
         }
     })
     return can;
+}
+
+function trad(x) {
+    console.log(x)
+    a = x.split(" ")[0]
+    console.log(a)
+    if (a == "Mon"){
+        a = "Lunedì"
+    } else if (a == "Tue"){
+        a = "Martedì"
+    } else if (a == "Wed"){
+        a = "Mercoledì"
+    } else if (a == "Thu"){
+        a = "Giovedì"
+    } else if (a == "Fri"){
+        a = "Venerdì"
+    } else if (a == "Sat"){
+        a = "Sabato"
+    } else if (a == "Sun"){
+        a = "Domenica"
+    }
+    console.log(a)
+    b = x.split(" ")[1]
+    if (b == "Jan"){
+        b = "Gennaio"
+    } else if (b == "Feb"){
+        b = "Febbraio"
+    } else if (b == "Mar"){
+        b = "Marzo"
+    } else if (b == "Apr"){
+        b = "Aprile"
+    } else if (b == "May"){
+        b = "Maggio"
+    } else if (b == "Jun"){
+        b = "Giugno"
+    } else if (b == "Jul"){
+        b = "Luglio"
+    } else if (b == "Aug"){
+        b = "Agosto"
+    } else if (b == "Sep"){
+        b = "Settembre"
+    } else if (b == "Oct"){
+        b = "Ottobre"
+    } else if (b == "Nov"){
+        b = "Novembre"
+    } else if (b == "Dec"){
+        b = "Dicembre"
+    }
+    console.log(b)
+    c = x.split(" ")[2]
+    d = x.split(" ")[3]
+
+    y = a + " " + c + " " + b + " " + d
+    console.log(y)
+    return y
 }
