@@ -93,6 +93,11 @@ client.on("messageCreate", async (message) => {
 
         }*/
 
+        if (message.content.split(" ")[0].toLowerCase() == "c") {
+            meteo();
+        }
+
+
 
         //Dare MS ai giocatori
         c_givems = symb + "givems";
@@ -2173,78 +2178,127 @@ function canali() {
 function trad(x) {
     //giorni settimana
     a = x.split(" ")[0]
-    if (a == "Mon"){
+    if (a == "Mon") {
         a = "Lunedì"
-    } else if (a == "Tue"){
+    } else if (a == "Tue") {
         a = "Martedì"
-    } else if (a == "Wed"){
+    } else if (a == "Wed") {
         a = "Mercoledì"
-    } else if (a == "Thu"){
+    } else if (a == "Thu") {
         a = "Giovedì"
-    } else if (a == "Fri"){
+    } else if (a == "Fri") {
         a = "Venerdì"
-    } else if (a == "Sat"){
+    } else if (a == "Sat") {
         a = "Sabato"
-    } else if (a == "Sun"){
+    } else if (a == "Sun") {
         a = "Domenica"
     }
 
     //mesi
     b = x.split(" ")[1]
-    if (b == "Jan"){
+    if (b == "Jan") {
         b = "Gennaio"
-    } else if (b == "Feb"){
+    } else if (b == "Feb") {
         b = "Febbraio"
-    } else if (b == "Mar"){
+    } else if (b == "Mar") {
         b = "Marzo"
-    } else if (b == "Apr"){
+    } else if (b == "Apr") {
         b = "Aprile"
-    } else if (b == "May"){
+    } else if (b == "May") {
         b = "Maggio"
-    } else if (b == "Jun"){
+    } else if (b == "Jun") {
         b = "Giugno"
-    } else if (b == "Jul"){
+    } else if (b == "Jul") {
         b = "Luglio"
-    } else if (b == "Aug"){
+    } else if (b == "Aug") {
         b = "Agosto"
-    } else if (b == "Sep"){
+    } else if (b == "Sep") {
         b = "Settembre"
-    } else if (b == "Oct"){
+    } else if (b == "Oct") {
         b = "Ottobre"
-    } else if (b == "Nov"){
+    } else if (b == "Nov") {
         b = "Novembre"
-    } else if (b == "Dec"){
+    } else if (b == "Dec") {
         b = "Dicembre"
     }
 
     //numero giorni con 0 davanti
     c = x.split(" ")[2]
-    if (c == "01"){
+    if (c == "01") {
         c = "1"
-    } else if (c == "02"){
+    } else if (c == "02") {
         c = "2"
-    } else if (c == "03"){
+    } else if (c == "03") {
         c = "3"
-    } else if (c == "04"){
+    } else if (c == "04") {
         c = "4"
-    } else if (c == "05"){
+    } else if (c == "05") {
         c = "5"
-    } else if (c == "06"){
+    } else if (c == "06") {
         c = "6"
-    } else if (c == "07"){
+    } else if (c == "07") {
         c = "7"
-    } else if (c == "08"){
+    } else if (c == "08") {
         c = "8"
-    } else if (c == "09"){
+    } else if (c == "09") {
         c = "9"
-    } 
+    }
 
     //anno
     d = x.split(" ")[3]
 
     //composizione completa 
     y = a + " " + c + " " + b + " " + d
-    
+
     //restituzione valore
     return y
+}
+
+function meteo() {
+    //definizione oggi ed anno associato
+    let td = new Date();
+    let y1 = td.getFullYear();
+    //anno bisesto
+    if (y1 % 4 == 0) {
+        y2 = y1;
+    } else {
+        y2 = Math.floor(y1 / 4) * 4;
+    }
+    //definizione data anno bisesto (mm/dd/yyyy)
+    let nd = new Date('01/01/' + y2);
+    //differnza in millisecondi
+    dif = td.getTime() - nd.getTime();
+    //conversione in giorni
+    tot = Math.ceil(dif / (1000 * 3600 * 24));
+    //esatti giorni durante l'anno 
+    x = tot - Math.floor((tot / 365)) * 365;
+    console.log(x);
+    //determina anno bisesto
+    if (Math.floor((tot / 365)) >= 3) {
+        b = true;
+    } else {
+        b = false;
+    }
+    //temperatura media durante l'anno
+    nt = Math.round((-Math.cos(2 * Math.PI * x / 365) + 1.5) * 100) / 10;
+    console.log(nt);
+    //andamento temperatura durante il giorno
+
+    //alba e tramonto
+    v = 273 + x;
+    if (b = true) {
+        //p è 273=240(4h)+33minuti + 182 giorni per arrivare al giorno più lungo dell'anno +2 bisesto
+        p = 456
+    } else {
+        p = 455
+    }
+    if (v > p) {
+        //da v sottrai il doppio della differenza tra v e p
+        v = 2 * p - v;
+    }
+    alba = v / 60;
+    ha = Math.floor(alba);
+    ma = Math.round(((alba - ha) * 60) * 100) / 100;
+
+    //console.log(tot)
 }
