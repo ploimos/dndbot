@@ -676,21 +676,6 @@ client.on("messageCreate", async (message) => {
                                 }
                             })
 
-                            // controlla se ci sono thread vecchi del PG
-                            tab5.find({ id_pl: tag }, async function (err, res) {
-                                if (res == null) {
-                                    console.log("Nuovo PG")
-                                } else {
-                                    for (let i = 0; i < res.length; i++) {
-                                        Text = message.guild.channels.cache.get(res[i].id_chan)
-                                        await Text.delete()
-                                            .then(deletedThread => console.log("Ho cancellato il thread " + deletedThread.id))
-                                            .catch(console.error);
-                                    }
-                                    await tab5.deleteMany({ id_pl: tag })
-                                }
-                            })
-
                             // crea thread mercato
                             await channela.threads
                                 .create({
@@ -699,11 +684,9 @@ client.on("messageCreate", async (message) => {
                                 })
                                 .then(res => idA = res.id)
                                 .catch(console.error);
-                            Text = message.guild.channels.cache.get(idA)
-                            await Text.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato " +
+                            TextA = message.guild.channels.cache.get(idA)
+                            await TextA.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato " +
                                 "ad ogni tuo acquisto all'interno della Land.");
-                            const g = new tab5({ id_pl: tag, name_pl: name, id_chan: idA, type: "Mercato" })
-                            g.save()
 
                             // crea thread dt
                             await channelb.threads
@@ -716,8 +699,26 @@ client.on("messageCreate", async (message) => {
                             TextB = message.guild.channels.cache.get(idB)
                             await TextB.send("Ciao " + tag + "," + "\nquesto thread sarà dedicato " +
                                 "ad ogni tuo downtime all'interno della Land.");
-                            const f = new tab5({ id_pl: tag, name_pl: name, id_chan: idB, type: "Downtime" })
-                            f.save()
+
+                            // controlla se ci sono thread vecchi del PG
+                            tab5.find({ id_pl: tag }, async function (err, res) {
+                                if (res == null) {
+                                    console.log("Nuovo PG")
+                                } else {
+                                    for (let i = 0; i < res.length; i++) {
+                                        Text = message.guild.channels.cache.get(res[i].id_chan)
+                                        await Text.delete()
+                                            .then(deletedThread => console.log("Ho cancellato il thread " + deletedThread.id))
+                                            .catch(console.error);
+                                    }
+                                    await tab5.deleteMany({ id_pl: tag })
+                                    //inserimento nel DB
+                                    const g = new tab5({ id_pl: tag, name_pl: name, id_chan: idA, type: "Mercato" });
+                                    g.save();
+                                    const f = new tab5({ id_pl: tag, name_pl: name, id_chan: idB, type: "Downtime" });
+                                    f.save();
+                                }
+                            })
 
                             // aggiornamento variabile
                             listaCanali = canali()
@@ -1883,10 +1884,27 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm2);
             }
         }
-        
+
+        // punti downtime
+        c_pdt = symb + "pdt";
+        f_pdt = "*'" + c_pdt + "'*";
+        if (message.content.split(" ")[0].toLowerCase() == c_pdt) {
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)) {
+                try {
+                    sda;
+                } catch (err) {
+                    message.channel.send(mess_err)
+                }
+
+            } else {
+                // messaggio non sei nella land
+                message.reply(amm2);
+            }
+        }
+
         // meteo
         c_meteo = symb + "meteo";
-        f_meteo = "*'" + c_meteo;
+        f_meteo = "*'" + c_meteo + "'*";
         if (message.content.split(" ")[0].toLowerCase() == c_meteo) {
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)) {
                 try {
