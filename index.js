@@ -83,7 +83,8 @@ client.on("messageCreate", async (message) => {
     if (!message.author.bot && ((mainChan).includes(message.channel.id) == true || (listaCanali).includes(message.channel.id) == true)) {
 
 
-        /*if (message.content.split(" ")[0].toLowerCase() == "b") {
+        /*
+        if (message.content.split(" ")[0].toLowerCase() == "b") {
 
             const embed = new Discord.MessageEmbed()
                 .setTitle('some title')
@@ -91,12 +92,14 @@ client.on("messageCreate", async (message) => {
                 .setImage('image url')
             message.reply({embeds: [embed]})
 
-        }*/
-
-        if (message.content.split(" ")[0].toLowerCase() == "c") {
-            meteo();
         }
+        */
 
+        /*
+        if (message.content.split(" ")[0].toLowerCase() == "c") {
+            //meteo();
+        }
+        */
 
 
         //Dare MS ai giocatori
@@ -234,7 +237,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm);
             }
         }
-
 
         // Dare denaro ai giocatori
         c_givemo = symb + "givemo";
@@ -569,7 +571,6 @@ client.on("messageCreate", async (message) => {
             }
         }
 
-
         // cancellare PG
         c_deletepg = symb + "deletepg";
         f_deletepg = "*'" + c_deletepg + " [Tag_Player]'*";
@@ -625,7 +626,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm);
             }
         }
-
 
         // creare PG
         c_creapg = symb + "creapg";
@@ -766,7 +766,6 @@ client.on("messageCreate", async (message) => {
             }
         }
 
-
         // dai denaro
         c_dai = symb + "dai";
         f_dai = "*'" + c_dai + " [Tag_Player_Beneficiario] [Denaro]'*";
@@ -844,7 +843,6 @@ client.on("messageCreate", async (message) => {
             }
         }
 
-
         // mostra info pg
         c_infopg = symb + "infopg";
         f_infopg = "*'" + c_infopg + "'*";
@@ -879,7 +877,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm2);
             }
         }
-
 
         // Downtime
         c_downtime = symb + "downtime";
@@ -961,7 +958,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm2);
             }
         }
-
 
         // Butta oggetto
         c_butta = symb + "butta";
@@ -1062,7 +1058,6 @@ client.on("messageCreate", async (message) => {
             }
         }
 
-
         // Spendi
         c_spendi = symb + "spendi";
         f_spendi = "*'" + c_spendi + " [Denaro]'*";
@@ -1105,7 +1100,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm2);
             }
         }
-
 
         // Aggiungere oggetti nel mercato
         c_additem = symb + "additem";
@@ -1315,7 +1309,6 @@ client.on("messageCreate", async (message) => {
             }
         }
 
-
         // Stop Downtime
         c_fermadowntime = symb + "fermadowntime";
         f_fermadowntime = "*'" + c_fermadowntime + "'*";
@@ -1353,7 +1346,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm2);
             }
         }
-
 
         // Vendi oggetti
         c_vendi = symb + "vendi";
@@ -1476,7 +1468,6 @@ client.on("messageCreate", async (message) => {
             }
         }
 
-
         // dare oggetto mercato da master a giocatore
         c_giveitem = symb + "giveitem";
         f_giveitem = "*'" + c_giveitem + " [Tag_Player] [Nome_Oggetto] [Quantità]'*";
@@ -1581,7 +1572,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm);
             }
         }
-
 
         // dare oggetto ad un altro giocatore
         c_regala = symb + "regala";
@@ -1695,7 +1685,6 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm);
             }
         }
-
 
         // inventario utente (solo master può scriverlo)
         c_inv = symb + "inv";
@@ -1894,6 +1883,22 @@ client.on("messageCreate", async (message) => {
                 message.reply(amm2);
             }
         }
+        
+        // meteo
+        c_meteo = symb + "meteo";
+        f_meteo = "*'" + c_meteo;
+        if (message.content.split(" ")[0].toLowerCase() == c_meteo) {
+            if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)) {
+                try {
+                    message.reply(meteo());
+                } catch (err) {
+                    message.reply(mess_err);
+                }
+            } else {
+                // messaggio non sei nella land
+                message.reply(amm2);
+            }
+        }
 
         // help differenziato per ruolo admin e utente
         c_help = symb + "help";
@@ -1965,6 +1970,10 @@ client.on("messageCreate", async (message) => {
                     + "**" + c_spendi + "**\n" +
                     laf + f_spendi + "\n"
                     + "e permette di spendere il denaro senza usare per forza il mercato.\n\n"
+                    // meteo
+                    + "**" + c_meteo + "**\n" +
+                    laf + f_meteo + "\n" +
+                    "e permette di sapere le informazioni relative al tempo atmosferico e alla giornata in generale.\n\n"
                     // mercato mostra gli oggetti del mercato
                     + "**" + c_mercato + "**\n" +
                     laf + f_mercato + ".\n" +
@@ -1993,7 +2002,6 @@ client.on("messageCreate", async (message) => {
 
 
 // Nuovo utente land
-
 client.on('guildMemberUpdate', (oldMember, newMember) => {
     let txtChannel = client.channels.cache.get(canaleBenv); //my own text channel, you may want to specify your own
     let oldRoleIDs = [];
@@ -2257,48 +2265,365 @@ function trad(x) {
 function meteo() {
     //definizione oggi ed anno associato
     let td = new Date();
+    //let td = new Date('07/23/2022');
     let y1 = td.getFullYear();
-    //anno bisesto
     if (y1 % 4 == 0) {
-        y2 = y1;
-    } else {
-        y2 = Math.floor(y1 / 4) * 4;
-    }
-    //definizione data anno bisesto (mm/dd/yyyy)
-    let nd = new Date('01/01/' + y2);
-    //differnza in millisecondi
-    dif = td.getTime() - nd.getTime();
-    //conversione in giorni
-    tot = Math.ceil(dif / (1000 * 3600 * 24));
-    //esatti giorni durante l'anno 
-    x = tot - Math.floor((tot / 365)) * 365;
-    console.log(x);
-    //determina anno bisesto
-    if (Math.floor((tot / 365)) >= 3) {
+        md = new Date('12/22/' + y1);
+        if (td > md) {
+            y1 = y1 + 1;
+            md = new Date('12/22/' + y1)
+        }
         b = true;
     } else {
+        md = new Date('12/21/' + y1);
+        if (td > md) {
+            y1 = y1 + 1;
+            md = new Date('12/21/' + y1)
+        }
         b = false;
     }
-    //temperatura media durante l'anno
-    nt = Math.round((-Math.cos(2 * Math.PI * x / 365) + 1.5) * 100) / 10;
-    console.log(nt);
-    //andamento temperatura durante il giorno
 
-    //alba e tramonto
-    v = 273 + x;
-    if (b = true) {
-        //p è 273=240(4h)+33minuti + 182 giorni per arrivare al giorno più lungo dell'anno +2 bisesto
-        p = 456
+    y2 = y1 - 1;
+    if (y2 % 4 == 0) {
+        //definizione (mm/dd/yyyy)
+        nd = new Date('12/22/' + y2);
     } else {
-        p = 455
+        nd = new Date('12/21/' + y2);
     }
-    if (v > p) {
-        //da v sottrai il doppio della differenza tra v e p
-        v = 2 * p - v;
-    }
-    alba = v / 60;
-    ha = Math.floor(alba);
-    ma = Math.round(((alba - ha) * 60) * 100) / 100;
 
-    //console.log(tot)
+    //differenza in millisecondi
+    dif = td.getTime() - nd.getTime();
+    dif2 = md.getTime() - nd.getTime();
+    //conversione in giorni
+    //dall'inizio dell'anno (inv) ad oggi
+    tot = Math.ceil(dif / (1000 * 3600 * 24));
+    //giorni totali nell'anno
+    tot2 = Math.ceil(dif2 / (1000 * 3600 * 24));
+
+    //temperatura media in quel giorno dell'anno (oggi)
+    nt = Math.round((-Math.cos(2 * Math.PI * tot / tot2) + 1.5) * 100) / 10;
+
+    //alba
+    if (b == true) {
+        fd = new Date('06/20/' + y1);
+    } else {
+        fd = new Date('06/21/' + y1);
+    }
+    //differenza tra sost. inverno(nd) ed estate(fd)
+    dif3 = fd.getTime() - nd.getTime();
+    //in giorni
+    tot3 = Math.ceil(dif3 / (1000 * 3600 * 24));
+    //totale giorni - int. tra sost. inverno ed estate
+    tot4 = tot2 - tot3;
+    //v alba e w tramonto
+    if (tot <= tot3) {
+        v = 453 - 180 * tot / tot3;
+        w = 1013 + 180 * tot / tot3;
+    } else {
+        tot = tot - tot3;
+        v = 273 + 180 * tot / tot4;
+        w = 1193 - 180 * tot / tot4;
+    }
+
+    //temperatura
+    alba = Math.round(v / 60 * 100) / 100;
+    tram = Math.round(w / 60 * 100) / 100;
+    orario = td.getHours() + Math.round(td.getMinutes() / 60 * 100) / 100;
+    picco = 14;
+    media = (picco - alba) / 2 + alba;
+    min = Math.round((nt - media + alba) * 10) / 10;
+    max = Math.round((nt + picco - alba) * 10) / 10;
+    if (orario >= alba && orario <= picco) {
+        tmp = Math.round((min + ((max - min) * (orario - alba) / (picco - alba))) * 10) / 10;
+    } else {
+        if (orario < alba) {
+            orario = orario + 24;
+        }
+        tmp = Math.round((max - ((max - min) * (orario - picco) / (24 - picco + alba))) * 10) / 10;
+    }
+
+    //ciclo lunare
+    ld = new Date('11/15/2020');
+    dif4 = td.getTime() - ld.getTime();
+    tot5 = Math.ceil(dif4 / (1000 * 3600 * 24));
+    cl = 29;
+    gl = Math.floor((tot5 / cl - Math.floor(tot5 / cl)) * cl);
+    if (gl = 1) {
+        fluna = "la luna nuova"; //novilunio
+    } else if (gl > 1 && gl < 7) {
+        fluna = "una luna crescente";
+    } else if (gl = 7) {
+        fluna = "un primo quarto della luna";
+    } else if (gl > 7 && gl < 15) {
+        fluna = "una gibbosa crescente";
+    } else if (gl = 15) {
+        fluna = "la luna piena"; //plenilunio
+    } else if (gl > 15 && gl < 23) {
+        fluna = "una gibbosa calante";
+    } else if (gl = 23) {
+        fluna = "un ultimo quarto della luna";
+    } else if (gl > 23 && gl < 30) {
+        fluna = "una luna calante";
+    }
+
+    //mese e quarto d'anno + tempo
+    mese = td.getMonth();
+    if (mese == 12 || mese < 3) {
+        qrt = 1;
+        prec = 5;
+        stg = "inverno";
+        if (tot % 5 == 0) {
+            tempo = "à una pioggia intensa";
+            acq = true;
+        } else if (tot % 5 == 1) {
+            tempo = "anno nubi con schiarite";
+            acq = false;
+        } else if (tot % 5 == 2) {
+            tempo = "à sole";
+            acq = false;
+        } else if (tot % 5 == 3) {
+            tempo = "anno nuvoloni scuri carichi di pioggia";
+            acq = false;
+        } else if (tot % 5 == 4) {
+            tempo = "à una pioggia con tuoni e fulmini";
+            acq = true;
+        }
+    } else if (mese >= 3 && mese < 6) {
+        qrt = 2;
+        prec = 7;
+        stg = "primavera";
+        if (tot % 7 == 0) {
+            tempo = "à una leggera pioggia";
+            acq = true;
+        } else if (tot % 7 == 1) {
+            tempo = "anno nubi con schiarite";
+            acq = false;
+        } else if (tot % 7 == 2) {
+            tempo = "à il sole con nuvole chiare";
+            acq = false;
+        } else if (tot % 7 == 3) {
+            tempo = "à il sole";
+            acq = false;
+        } else if (tot % 7 == 4) {
+            tempo = "à il sole variabile";
+            acq = false;
+        } else if (tot % 7 == 5) {
+            tempo = "à il sole completamente coperto dalle nuvole";
+            acq = false;
+        } else if (tot % 7 == 6) {
+            tempo = "à pioggia";
+            acq = true;
+        }
+    } else if (mese >= 6 && mese < 9) {
+        qrt = 3;
+        prec = 12;
+        stg = "estate";
+        if (tot % 12 == 0) {
+            tempo = "à una leggera pioggia";
+            acq = true;
+        } else if (tot % 2 == 1) {
+            tempo = "à un sole molto forte";
+            acq = false;
+        } else if (tot % 2 == 0) {
+            tempo = "à il sole coperto da nuvole chiare";
+            acq = false;
+        }
+    } else if (mese >= 9 && mese < 12) {
+        qrt = 4;
+        prec = 7;
+        stg = "autunno";
+        if (tot % 7 == 0) {
+            tempo = "à pioggia";
+            acq = true;
+        } else if (tot % 7 == 1) {
+            tempo = "anno nubi con schiarite";
+            acq = false;
+        } else if (tot % 7 == 2) {
+            tempo = "à un sole parzialmente coperto";
+            acq = false;
+        } else if (tot % 7 == 3) {
+            tempo = "à il sole";
+            acq = false;
+        } else if (tot % 7 == 4) {
+            tempo = "à un sole completamente coperto";
+            acq = false;
+        } else if (tot % 7 == 5) {
+            tempo = "anno nuvole scure che portano pioggia";
+            acq = false;
+        } else if (tot % 7 == 6) {
+            tempo = "à una pioggia intensa";
+            acq = true;
+        }
+    }
+
+    //precipitazioni
+    if (acq == true) {
+        dfm = 89;
+        if (qrt == 1) {
+            mmp = Math.round(-(Math.cos(2 * Math.PI * tot / dfm) + 5) * 10) / 10;
+        } else if (qrt == 2) {
+            mmp = Math.round((4 - 2 * (tot - dfm) / dfm) * 10) / 10;
+        } else if (qrt == 3) {
+            mmp = Math.round((Math.cos(2 * Math.PI * (tot - 2 * dfm) / dfm) + 1) * 10) / 10;
+        } else if (qrt == 4) {
+            mmp = Math.round((4 + 2 * (tot - 3 * dfm) / dfm) * 10) / 10;
+        }
+    }
+
+    //nome mese
+    if (mese == 1) {
+        mesen = "Gennaio";
+    } else if (mese == 2) {
+        mesen = "Febbraio";
+    } else if (mese == 3) {
+        mesen = "Marzo";
+    } else if (mese == 4) {
+        mesen = "Aprile";
+    } else if (mese == 5) {
+        mesen = "Maggio";
+    } else if (mese == 6) {
+        mesen = "Giugno";
+    } else if (mese == 7) {
+        mesen = "Luglio";
+    } else if (mese == 8) {
+        mesen = "Agosto";
+    } else if (mese == 9) {
+        mesen = "Settembre";
+    } else if (mese == 10) {
+        mesen = "Ottobre";
+    } else if (mese == 11) {
+        mesen = "Novembre";
+    } else if (mese == 12) {
+        mesen = "Dicembre";
+    }
+
+    //vento
+    vb = Math.round(tot5 + orario);
+    int = (1 - Math.cos(2 * Math.PI * (vb % 25) / 24)) / 2;
+    z = Math.round(int * 5 / (2 * prec) * 100);
+    c = vb % 9;
+
+    //variabile direzione rosa dei venti
+    if (vb % 6 == 0) {
+        c = c;
+    } else if (vb % 3 == 0) {
+        c = c - 1;
+    } else if (vb % 2 == 0) {
+        c = c + 1;
+    } else {
+        if ((vb % 25) % 2 == 0) {
+            c = c + 1;
+        } else {
+            c = c - 1;
+        }
+    }
+
+    //condizione di eccedenza
+    if (c > 8) {
+        c = c % 9 + 1;
+    }
+
+    //determinazione direzione
+    if (c == 1) {
+        dir = "nord";
+    } else if (c == 2) {
+        dir = "nord-est";
+    } else if (c == 3) {
+        dir = "est";
+    } else if (c == 4) {
+        dir = "sud-est";
+    } else if (c == 5) {
+        dir = "sud";
+    } else if (c == 6) {
+        dir = "sud-ovest";
+    } else if (c == 7) {
+        dir = "ovest";
+    } else if (c == 8) {
+        dir = "nord-ovest";
+    }
+
+    //vecchio metodo
+    /*nord = (1 - Math.cos(2 * Math.PI * (vb % 102) / 101));
+    sud = (Math.cos(2 * Math.PI * (vb % 104) / 103) - 1);
+    est = (1 - Math.cos(2 * Math.PI * (vb % 108) / 107));
+    ovest = (Math.cos(2 * Math.PI * (vb % 110) / 109) - 1);
+    y = (nord + sud) / 2;
+    console.log(y)
+    x = (est + ovest) / 2;
+    console.log(x)
+    z = Math.sqrt(x * x + y * y);
+    console.log(z)
+    if (z > 1) {
+        z = z - Math.floor(z);
+    }
+    ya = Math.asin(Math.abs(z)) * 180 / Math.PI;
+    xa = Math.acos(Math.abs(z)) * 180 / Math.PI;
+    z = Math.round(z * 5 / (2 * prec) * 100);
+    console.log("y " + ya)
+    console.log("x " + xa)
+    if (x >= 0 && y >= 0) {
+        if (ya <= 15) {
+            dir = "nord";
+        } else if (ya >= 75) {
+            dir = "est";
+        } else {
+            dir = "nord-est";
+        }
+    } else if (x < 0 && y >= 0) {
+        if (ya <= 15) {
+            dir = "nord";
+        } else if (ya >= 75) {
+            dir = "ovest";
+        } else {
+            dir = "nord-ovest";
+        }
+    } else if (x < 0 && y < 0) {
+        if (ya <= 15) {
+            dir = "sud";
+        } else if (ya >= 75) {
+            dir = "ovest";
+        } else {
+            dir = "sud-ovest";
+        }
+    } else if (x >= 0 && y < 0) {
+        if (ya <= 15) {
+            dir = "sud";
+        } else if (ya >= 75) {
+            dir = "est";
+        } else {
+            dir = "sud-est";
+        }
+    }*/
+
+    //scrittura messaggio
+    albam = Math.floor((alba - Math.floor(alba)) * 60);
+    tramm = Math.floor((tram - Math.floor(tram)) * 60);
+    //introduzione
+    if (td.getMinutes() < 10) {
+        min0 = "0";
+    } else {
+        min0 = "";
+    }
+    messaggio = "Oggi " + td.getDay() + " " + mesen + " " + td.getFullYear() +
+        " alle ore " + td.getHours() + ":" + min0 + td.getMinutes() + " ci sono " +
+        tmp + " °C e c'è un vento proveniente da " + dir + " a " + z + " km/h.\n";
+    //tempo atmosferico
+    messaggio = messaggio + "Oggi ci sar" + tempo;
+    //pioggia
+    if (acq == true) {
+        messaggio = messaggio + " e si prevedono in media, per tutta la giornata," +
+            " circa " + mmp + " millimetri di pioggia";
+    }
+    messaggio = messaggio + ".\n"
+    //alba e tramonto + fase lunare
+    if (orario >= alba && orario <= tram) {
+        messaggio = messaggio + "Il sole è sorto alle " + Math.floor(alba) + ":" + albam
+            + " e tramonterà alle " + Math.floor(tram) + ":" + tramm + ".\n";
+        messaggio = messaggio + "Stanotte si potrà vedere in cielo " + fluna + ".\n";
+    } else {
+        messaggio = messaggio + "Il sole è tramontato alle " + Math.floor(tram) + ":" + tramm +
+            " e sorgerà alle " + Math.floor(alba) + ":" + albam + ".\n";
+        messaggio = messaggio + "Adesso si può vedere in cielo " + fluna + ".\n";
+    }
+    return messaggio
 }
