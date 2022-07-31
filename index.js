@@ -44,6 +44,7 @@ const tab1 = mongoose.model('Tab1', {
     ms: Number,
     lvl: Number,
     tier: Number,
+    pdt: Number,
     date: Date
 })
 
@@ -77,6 +78,14 @@ const tab5 = mongoose.model('Tab5', {
     name_pl: String,
     id_chan: String,
     type: String
+})
+
+// cronologia DT
+const tab6 = mongoose.model('Tab6', {
+    id_pl: String,
+    name_pl: String,
+    type_dt: String,
+    points: String
 })
 
 client.on("messageCreate", async (message) => {
@@ -420,7 +429,8 @@ client.on("messageCreate", async (message) => {
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
-                                    ",\n**Ultima Sessione**: " + trad(res.date.toDateString()) + ".");
+                                    ",\n**Punti DT**: " + res.pdt + ",\n**Ultima Sessione**: " +
+                                    trad(res.date.toDateString()) + ".");
                             }
                         })
                     } else {
@@ -462,8 +472,8 @@ client.on("messageCreate", async (message) => {
                                     mess = mess + "\n**Tag**: " + res[times - 1].id +
                                         "\n**Nome**: " + res[times - 1].nome + ",\n**Tier**: " + res[times - 1].tier +
                                         ",\n**Livello**: " + res[times - 1].lvl + ",\n**Denaro**: " + res[times - 1].mo +
-                                        " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Ultima Sessione**: " +
-                                        trad(res[times - 1].date.toDateString()) + ".\n";
+                                        " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Punti DT**: " + res[times - 1].pdt +
+                                        ",\n**Ultima Sessione**: " + trad(res[times - 1].date.toDateString()) + ".\n";
                                     times = times - 1
                                 }, times);
 
@@ -732,7 +742,7 @@ client.on("messageCreate", async (message) => {
                             let data = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
                             // plurale o singolare
-                            await tab1.findOneAndUpdate({ id: tag }, { id: tag, nome: name, mo: num, ms: numb, lvl: level, tier: tie, date: data }, { upsert: true })
+                            await tab1.findOneAndUpdate({ id: tag }, { id: tag, nome: name, mo: num, ms: numb, lvl: level, tier: tie, pdt: 0, date: data }, { upsert: true })
                             await tab2.findOneAndDelete({ id: tag })
                             await tab4.deleteMany({ id_pl: tag })
 
@@ -866,6 +876,7 @@ client.on("messageCreate", async (message) => {
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
+                                    + ",\n**Punti DT**: " + res.pdt +
                                     ",\n**Ultima Sessione**: " + trad(res.date.toDateString()) + ".");
                             }
                         })
@@ -1891,7 +1902,62 @@ client.on("messageCreate", async (message) => {
         if (message.content.split(" ")[0].toLowerCase() == c_pdt) {
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)) {
                 try {
-                    sda;
+                    // dichiarazioni valori
+                    let tag = "<@" + message.author.id + ">";
+                    giorno = new Date(oggi());
+
+                    tab1.findOne({ id: tag }, async function (err, res) {
+                        if (!res) {
+                            message.reply("Il personaggio di " + tag + " non esiste.")
+                        } else {
+                            if (tipo == "" || tipo == null) {
+                                tab2.findOne({ id: tag }, async function (err, res) {
+                                    if (!res) {
+                                        message.reply("Il personaggio di " + tag + " non ha un downtime attivo.")
+                                    } else {
+                                        if (res.date > giorno) {
+                                            message.reply("Il downtime di " + tag + " non è ancora terminato.")
+                                        } else {
+                                            message.reply("Il downtime di " + res.type + " effettuato da " + tag +
+                                                " è terminato.\nContattare un <@&" + ruolo + "> per ottenere i risultati.")
+                                            await tab2.deleteOne({ id: tag })
+                                        }
+                                    }
+                                })
+                            } else {
+                                if (tipo.length > 1) {
+                                    if (num == null || num <= 0 || num == "" || isNaN(num)) {
+                                        // valore predefinito 7 giorni
+                                        num = 7;
+                                    }
+                                    data = addDays(giorno, num)
+
+                                    tab2.findOne({ id: tag }, function (err, res) {
+                                        if (!res) {
+                                            if (num == 1) {
+                                                a = "o"
+                                            } else {
+                                                a = "i"
+                                            }
+                                            const dt = new tab2({ id: tag, type: tipo, date: data })
+                                            dt.save()
+                                            message.reply("Il downtime di " + tipo + " che verrà effettuato da " + tag +
+                                                ", terminerà tra " + num + " giorn" + a + ".")
+                                        } else {
+                                            if (giorno < res.date) {
+                                                message.reply("Il personaggio di " + tag + " non può avviare un secondo downtime " +
+                                                    "senza aver terminato quello in corso.\nIl downtime attuale termina il giorno: "
+                                                    + trad(res.date.toDateString()) + ".")
+                                            } else {
+                                                message.reply("Devi prima riscuotere il downtime che hai concluso.\n||Scrivi '" + c_downtime + "' " +
+                                                    "così puoi riscattare il downtime concluso.||")
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    })
                 } catch (err) {
                     message.channel.send(mess_err)
                 }
@@ -2386,7 +2452,7 @@ function meteo() {
 
     //mese e quarto d'anno + tempo
     mese = td.getMonth();
-    if (mese == 12 || mese < 3) {
+    if (mese == 11 || mese < 2) {
         qrt = 1;
         prec = 5;
         stg = "inverno";
@@ -2406,7 +2472,7 @@ function meteo() {
             tempo = "à una pioggia con tuoni e fulmini";
             acq = true;
         }
-    } else if (mese >= 3 && mese < 6) {
+    } else if (mese >= 2 && mese < 5) {
         qrt = 2;
         prec = 7;
         stg = "primavera";
@@ -2432,7 +2498,7 @@ function meteo() {
             tempo = "à pioggia";
             acq = true;
         }
-    } else if (mese >= 6 && mese < 9) {
+    } else if (mese >= 5 && mese < 8) {
         qrt = 3;
         prec = 12;
         stg = "estate";
@@ -2446,7 +2512,7 @@ function meteo() {
             tempo = "à il sole coperto da nuvole chiare";
             acq = false;
         }
-    } else if (mese >= 9 && mese < 12) {
+    } else if (mese >= 8 && mese < 11) {
         qrt = 4;
         prec = 7;
         stg = "autunno";
@@ -2489,29 +2555,29 @@ function meteo() {
     }
 
     //nome mese
-    if (mese == 1) {
+    if (mese == 0) {
         mesen = "Gennaio";
-    } else if (mese == 2) {
+    } else if (mese == 1) {
         mesen = "Febbraio";
-    } else if (mese == 3) {
+    } else if (mese == 2) {
         mesen = "Marzo";
-    } else if (mese == 4) {
+    } else if (mese == 3) {
         mesen = "Aprile";
-    } else if (mese == 5) {
+    } else if (mese == 4) {
         mesen = "Maggio";
-    } else if (mese == 6) {
+    } else if (mese == 5) {
         mesen = "Giugno";
-    } else if (mese == 7) {
+    } else if (mese == 6) {
         mesen = "Luglio";
-    } else if (mese == 8) {
+    } else if (mese == 7) {
         mesen = "Agosto";
-    } else if (mese == 9) {
+    } else if (mese == 8) {
         mesen = "Settembre";
-    } else if (mese == 10) {
+    } else if (mese == 9) {
         mesen = "Ottobre";
-    } else if (mese == 11) {
+    } else if (mese == 10) {
         mesen = "Novembre";
-    } else if (mese == 12) {
+    } else if (mese == 11) {
         mesen = "Dicembre";
     }
 
@@ -2622,7 +2688,7 @@ function meteo() {
     } else {
         min0 = "";
     }
-    messaggio = "Oggi " + td.getDay() + " " + mesen + " " + td.getFullYear() +
+    messaggio = "Oggi " + td.getDate() + " " + mesen + " " + td.getFullYear() +
         " alle ore " + td.getHours() + ":" + min0 + td.getMinutes() + " ci sono " +
         tmp + " °C e c'è un vento proveniente da " + dir + " a " + z + " km/h.\n";
     //tempo atmosferico
