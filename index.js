@@ -2432,19 +2432,19 @@ function meteo() {
     tot5 = Math.ceil(dif4 / (1000 * 3600 * 24));
     cl = 29;
     gl = Math.floor((tot5 / cl - Math.floor(tot5 / cl)) * cl);
-    if (gl = 1) {
+    if (gl == 1) {
         fluna = "la luna nuova"; //novilunio
     } else if (gl > 1 && gl < 7) {
         fluna = "una luna crescente";
-    } else if (gl = 7) {
+    } else if (gl == 7) {
         fluna = "un primo quarto della luna";
     } else if (gl > 7 && gl < 15) {
         fluna = "una gibbosa crescente";
-    } else if (gl = 15) {
+    } else if (gl == 15) {
         fluna = "la luna piena"; //plenilunio
     } else if (gl > 15 && gl < 23) {
         fluna = "una gibbosa calante";
-    } else if (gl = 23) {
+    } else if (gl == 23) {
         fluna = "un ultimo quarto della luna";
     } else if (gl > 23 && gl < 30) {
         fluna = "una luna calante";
