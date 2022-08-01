@@ -466,7 +466,7 @@ client.on("messageCreate", async (message) => {
                                         "\n**Nome**: " + res[times - 1].nome + ",\n**Tier**: " + res[times - 1].tier +
                                         ",\n**Livello**: " + res[times - 1].lvl + ",\n**Denaro**: " + res[times - 1].mo +
                                         " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Punti DT**: " +
-                                        res[times - 1].pdt + "/"+ res[times - 1].pdtt +",\n**Ultima Sessione**: " +
+                                        res[times - 1].pdt + "/" + res[times - 1].pdtt + ",\n**Ultima Sessione**: " +
                                         trad(res[times - 1].date.toDateString()) + ".\n";
                                     times = times - 1
                                 }, times);
@@ -736,8 +736,10 @@ client.on("messageCreate", async (message) => {
                             let data = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
                             // plurale o singolare
-                            await tab1.findOneAndUpdate({ id: tag }, { id: tag, nome: name, mo: num, ms: numb, 
-                                lvl: level, tier: tie, pdt: 0, pdtt: 0, date: data }, { upsert: true })
+                            await tab1.findOneAndUpdate({ id: tag }, {
+                                id: tag, nome: name, mo: num, ms: numb,
+                                lvl: level, tier: tie, pdt: 0, pdtt: 0, date: data
+                            }, { upsert: true })
                             await tab2.findOneAndDelete({ id: tag })
                             await tab4.deleteMany({ id_pl: tag })
 
@@ -1892,6 +1894,26 @@ client.on("messageCreate", async (message) => {
         }
 
         // punti downtime
+
+        /////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////
+        // Devi mettere una condizione che non tenga conto del DT che ti permetterà
+        // di prelevare i pdt, così che possano comunque partire dei DT extra a
+        // questo prelievo di pdt.
+        // Da controllare ovviamente anche l'altro comando dei DT, potrebbero esserci
+        // condizioni da aggiungere in merito a questa cosa.
+        // I PDT dovranno aumentare sia quelli attuali che totali.
+        // La spesa dovrà diminuire solo quelli attuali.
+        // "!ottienipdt" e "!spendipdt" saranno i comandi.
+        // Funzionerà così: prendi i pdt ogni settimana, a prescindere da quando li
+        // chiedi. Se la settimana è passata, non ti verranno accreditati PDT extra.
+        // Bisogna essere attvi nella Land!
+        // Una volta ottenuti, spenderai la cifra dovuta e/o concordata con il master.
+        // Dopo aver speso, citi il messaggio di sopra e rispondi scrivendo il motivo
+        // per cui hai speso i PDT.
+        /////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////
+
         c_pdt = symb + "ottienipdt";
         f_pdt = "*'" + c_pdt + "'*";
         if (message.content.split(" ")[0].toLowerCase() == c_pdt) {
