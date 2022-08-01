@@ -45,6 +45,7 @@ const tab1 = mongoose.model('Tab1', {
     lvl: Number,
     tier: Number,
     pdt: Number,
+    pdtt: Number,
     date: Date
 })
 
@@ -78,14 +79,6 @@ const tab5 = mongoose.model('Tab5', {
     name_pl: String,
     id_chan: String,
     type: String
-})
-
-// cronologia DT
-const tab6 = mongoose.model('Tab6', {
-    id_pl: String,
-    name_pl: String,
-    type_dt: String,
-    points: String
 })
 
 client.on("messageCreate", async (message) => {
@@ -429,8 +422,8 @@ client.on("messageCreate", async (message) => {
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
-                                    ",\n**Punti DT**: " + res.pdt + ",\n**Ultima Sessione**: " +
-                                    trad(res.date.toDateString()) + ".");
+                                    ",\n**Punti DT**: " + res.pdt + "/" + res.pdtt +
+                                    ",\n**Ultima Sessione**: " + trad(res.date.toDateString()) + ".");
                             }
                         })
                     } else {
@@ -472,8 +465,9 @@ client.on("messageCreate", async (message) => {
                                     mess = mess + "\n**Tag**: " + res[times - 1].id +
                                         "\n**Nome**: " + res[times - 1].nome + ",\n**Tier**: " + res[times - 1].tier +
                                         ",\n**Livello**: " + res[times - 1].lvl + ",\n**Denaro**: " + res[times - 1].mo +
-                                        " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Punti DT**: " + res[times - 1].pdt +
-                                        ",\n**Ultima Sessione**: " + trad(res[times - 1].date.toDateString()) + ".\n";
+                                        " MO,\n**Milestones**: " + res[times - 1].ms + ",\n**Punti DT**: " +
+                                        res[times - 1].pdt + "/"+ res[times - 1].pdtt +",\n**Ultima Sessione**: " +
+                                        trad(res[times - 1].date.toDateString()) + ".\n";
                                     times = times - 1
                                 }, times);
 
@@ -742,7 +736,8 @@ client.on("messageCreate", async (message) => {
                             let data = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
                             // plurale o singolare
-                            await tab1.findOneAndUpdate({ id: tag }, { id: tag, nome: name, mo: num, ms: numb, lvl: level, tier: tie, pdt: 0, date: data }, { upsert: true })
+                            await tab1.findOneAndUpdate({ id: tag }, { id: tag, nome: name, mo: num, ms: numb, 
+                                lvl: level, tier: tie, pdt: 0, pdtt: 0, date: data }, { upsert: true })
                             await tab2.findOneAndDelete({ id: tag })
                             await tab4.deleteMany({ id_pl: tag })
 
@@ -876,7 +871,7 @@ client.on("messageCreate", async (message) => {
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
-                                    + ",\n**Punti DT**: " + res.pdt +
+                                    + ",\n**Punti DT**: " + res.pdt + "/" + res.pdtt +
                                     ",\n**Ultima Sessione**: " + trad(res.date.toDateString()) + ".");
                             }
                         })
