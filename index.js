@@ -873,7 +873,7 @@ client.on("messageCreate", async (message) => {
                                     "**Tag**: " + tag + ",\n**Nome**: " + res.nome +
                                     ",\n**Tier**: " + res.tier + ",\n**Livello**: " + res.lvl +
                                     ",\n**Denaro**: " + res.mo + " MO,\n**Milestones**: " + res.ms +
-                                    + ",\n**Punti DT**: " + res.pdt + "/" + res.pdtt +
+                                    ",\n**Punti DT**: " + res.pdt + "/" + res.pdtt +
                                     ",\n**Ultima Sessione**: " + trad(res.date.toDateString()) + ".");
                             }
                         })
