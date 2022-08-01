@@ -1897,7 +1897,7 @@ client.on("messageCreate", async (message) => {
         }
 
         // punti downtime
-        c_pdt = symb + "pdt";
+        c_pdt = symb + "ottienipdt";
         f_pdt = "*'" + c_pdt + "'*";
         if (message.content.split(" ")[0].toLowerCase() == c_pdt) {
             if (message.member.roles.cache.has(ruolo) || message.member.roles.cache.has(utente)) {
@@ -2402,15 +2402,18 @@ function meteo() {
     //v alba e w tramonto
     if (tot <= tot3) {
         v = 453 - 180 * tot / tot3;
+        v2 = 453 - 180 * (tot + 1) / tot3;
         w = 1013 + 180 * tot / tot3;
     } else {
         tot = tot - tot3;
         v = 273 + 180 * tot / tot4;
+        v2 = 273 + 180 * (tot + 1) / tot4;
         w = 1193 - 180 * tot / tot4;
     }
 
     //temperatura
     alba = Math.round(v / 60 * 100) / 100;
+    alba2 = Math.round(v2 / 60 * 100) / 100;
     tram = Math.round(w / 60 * 100) / 100;
     orario = td.getHours() + Math.round(td.getMinutes() / 60 * 100) / 100;
     picco = 14;
@@ -2428,7 +2431,11 @@ function meteo() {
 
     //ciclo lunare
     ld = new Date('11/15/2020');
+    ore = td.getHours() * 60 + td.getMinutes;
     dif4 = td.getTime() - ld.getTime();
+    if (ore < alba) {
+        dif4 = dif4 - 1;
+    }
     tot5 = Math.ceil(dif4 / (1000 * 3600 * 24));
     cl = 29;
     gl = Math.floor((tot5 / cl - Math.floor(tot5 / cl)) * cl);
@@ -2681,6 +2688,7 @@ function meteo() {
 
     //scrittura messaggio
     albam = Math.floor((alba - Math.floor(alba)) * 60);
+    alba2m = Math.floor((alba2 - Math.floor(alba2)) * 60);
     tramm = Math.floor((tram - Math.floor(tram)) * 60);
     //introduzione
     if (td.getMinutes() < 10) {
@@ -2688,14 +2696,24 @@ function meteo() {
     } else {
         min0 = "";
     }
-    messaggio = "Oggi " + td.getDate() + " " + mesen + " " + td.getFullYear() +
-        " alle ore " + td.getHours() + ":" + min0 + td.getMinutes() + " ci sono " +
+    if (td.getHours() < 10) {
+        ore0 = "0";
+    } else {
+        ore0 = "";
+    }
+    if (td.getDate() == 1) {
+        primo = "°";
+    } else {
+        primo = "";
+    }
+    messaggio = "Oggi, " + td.getDate() + primo + " " + mesen + " " + td.getFullYear() +
+        " alle ore " + ore0 + td.getHours() + ":" + min0 + td.getMinutes() + ", ci sono " +
         tmp + " °C e c'è un vento proveniente da " + dir + " a " + z + " km/h.\n";
     //tempo atmosferico
-    messaggio = messaggio + "Oggi ci sar" + tempo;
+    messaggio = messaggio + "Per tutta la giornata ci sar" + tempo;
     //pioggia
     if (acq == true) {
-        messaggio = messaggio + " e si prevedono in media, per tutta la giornata," +
+        messaggio = messaggio + " e si prevedono in media, durante tutto il giorno," +
             " circa " + mmp + " millimetri di pioggia";
     }
     messaggio = messaggio + ".\n"
@@ -2706,7 +2724,7 @@ function meteo() {
         messaggio = messaggio + "Stanotte si potrà vedere in cielo " + fluna + ".\n";
     } else {
         messaggio = messaggio + "Il sole è tramontato alle " + Math.floor(tram) + ":" + tramm +
-            " e sorgerà alle " + Math.floor(alba) + ":" + albam + ".\n";
+            " e sorgerà alle " + Math.floor(alba2) + ":" + alba2m + ".\n";
         messaggio = messaggio + "Adesso si può vedere in cielo " + fluna + ".\n";
     }
     return messaggio
